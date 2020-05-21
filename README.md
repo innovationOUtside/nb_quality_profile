@@ -1,7 +1,7 @@
 # nb_quality_profile
 Simple tools for reviewing the quality of Jupyter notebooks.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nbev3devsim/master?filepath=demo.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_quality_profile/master?filepath=demo.ipynb)
 
 At the moment, only a single tool is provided: a visualisation of notebook structure (relative length, structure in terms of markdown vs code cell). Visualisations are of the form:
 
