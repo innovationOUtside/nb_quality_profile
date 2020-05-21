@@ -1,4 +1,4 @@
-# nb_profile
+# nb_quality_profile
 Simple tools for reviewing the quality of Jupyter notebooks.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nbev3devsim/master?filepath=demo.ipynb)
