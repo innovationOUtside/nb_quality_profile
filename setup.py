@@ -18,7 +18,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        nb_quality=nb_quality_profile.cli:review
+        nb_quality=nb_quality_profile.cli:cli
     '''
 
 )

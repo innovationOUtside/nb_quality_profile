@@ -15,20 +15,33 @@ Install from this repo:
 
 ## Usage
 
-On the command line, cd to the desired directory and run:
+Base:
 
-`nb_quality .`
+```
+Usage: nb_quality [OPTIONS] COMMAND [ARGS]...
 
-or pass in a directory path instead of `.`.
+Options:
+  --help  Show this message and exit.
 
-#### Options
+Commands:
+  chart  Display notebook profile chart.
+  
+```
+ 
+ Commands:
+ 
+```
+Usage: nb_quality chart [OPTIONS] PATH
 
+  Display notebook profile chart.
 
-- `--out / -o`: The output file is saved as `nb_quality_review.png`  by default. Pass in another name via the `-o myimage.png` flag;
-- `--gap / -g`: gap between bands (`float`);
-- `--gapcolor / -G`: gap colour (default `lightgrey`);
-- `--linewidth / -l`: width of line (`int`);
-
+Options:
+  -o, --out TEXT           Image outfile
+  -g, --gap FLOAT          Gap
+  -G, --gapcolor TEXT      Gap colour
+  -l, --linewidth INTEGER  Line width
+  --help                   Show this message and exit.
+ ```
 
 
 On a Mac, you may get a warning of the form:
