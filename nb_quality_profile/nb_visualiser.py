@@ -1,3 +1,17 @@
+# ---
+# jupyter:
+#   jupytext:
+#     text_representation:
+#       extension: .py
+#       format_name: light
+#       format_version: '1.5'
+#       jupytext_version: 1.4.2
+#   kernelspec:
+#     display_name: Python 3
+#     language: python
+#     name: python3
+# ---
+
 # # Simple Notebook Visualiser
 #
 # Simple notebook visualiser for one or more Jupyter notebooks.
@@ -59,18 +73,22 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
 
             y = _y
     
-    x=0
-    y=0
+    x = 1
+    y = 0
     
     #If we have a single cell_map for a single notebook
     if isinstance(cell_map,list):
         gap = gap if gap is not None else get_gap(cell_map) * gap_boost
-        fig, ax = plt.subplots(figsize=(w, 1))
+        fig, ax = plt.subplots(figsize=(w, 2))
+        plt.text(0, 0, "Notebook quality report")
+        plt.plot([0, 10],[0,0], 'grey', linewidth=1)
         plotter(cell_map, x, y)
     #If we are plotting cell_maps for multiple notebooks
     elif isinstance(cell_map,dict):
         gap = gap if gap is not None else get_gap(cell_map) * gap_boost
-        fig, ax = plt.subplots(figsize=(w,len(cell_map)))
+        fig, ax = plt.subplots(figsize=(w, 1 + len(cell_map)))
+        plt.text(0, 0, "\nNotebook quality report")
+        plt.plot([0, 10],[0,0], 'grey', linewidth=1)
         for k in cell_map:
             plotter(cell_map[k], x, y, k)
             x = x + 1
@@ -155,22 +173,28 @@ def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
         cell_map = _nb_vis_parse_nb(path)
         
     nb_vis(cell_map, img_file, linewidth, w, **kwargs)
-# -
 
+# + tags=["active-ipynb"]
 # Test a single notebook mapper:
 
-TEST_NOTEBOOK = 'Notebook_profile_test.ipynb'
+# + tags=["active-ipynb"]
+# TEST_NOTEBOOK = 'Notebook_profile_test.ipynb'
 
-nb_vis_parse_nb(TEST_NOTEBOOK)
+# + tags=["active-ipynb"]
+# nb_vis_parse_nb(TEST_NOTEBOOK)
 
+# + tags=["active-ipynb"]
 # Test a plot of multiple notebooks down a path:
 
-nb_vis_parse_nb('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/Part 02 Notebooks',
-                linewidth=10, gap_colour='white', gap=1, img_file='test-nbvis.png')
+# + tags=["active-ipynb"]
+# nb_vis_parse_nb('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/Part 02 Notebooks',
+#                 linewidth=10, gap_colour='white', gap=1, img_file='test-nbvis.png')
 
-nb_vis_parse_nb('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/Part 02 Notebooks',
-                linewidth=10, gap=0, img_file='test-nbvis.png')
+# + tags=["active-ipynb"]
+# nb_vis_parse_nb('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/Part 02 Notebooks',
+#                 linewidth=10, gap=0, img_file='test-nbvis.png')
 
+# + tags=["active-ipynb"]
 # Can we see the saved test file?
 #
 # ![](test-nbvis.png)

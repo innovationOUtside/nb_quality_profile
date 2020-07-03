@@ -12,8 +12,13 @@ setup(
     ''',
     long_description_content_type="text/markdown",
     install_requires=[
+        'click',
         'nbformat',
         'matplotlib'
     ],
+    entry_points='''
+        [console_scripts]
+        nb_quality=nb_quality_profile.cli:review
+    '''
 
 )
