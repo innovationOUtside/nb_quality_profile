@@ -76,24 +76,13 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     x = 1
     y = 0
     
-    #If we have a single cell_map for a single notebook
-    if isinstance(cell_map,list):
-        gap = gap if gap is not None else get_gap(cell_map) * gap_boost
-        fig, ax = plt.subplots(figsize=(w, 2))
-        plt.text(0, 0, "Notebook quality report")
-        plt.plot([0, 10],[0,0], 'grey', linewidth=1)
-        plotter(cell_map, x, y)
-    #If we are plotting cell_maps for multiple notebooks
-    elif isinstance(cell_map,dict):
-        gap = gap if gap is not None else get_gap(cell_map) * gap_boost
-        fig, ax = plt.subplots(figsize=(w, 1 + len(cell_map)))
-        plt.text(0, 0, "\nNotebook quality report")
-        plt.plot([0, 10],[0,0], 'grey', linewidth=1)
-        for k in cell_map:
-            plotter(cell_map[k], x, y, k)
-            x = x + 1
-    else:
-        print('wtf')
+    gap = gap if gap is not None else get_gap(cell_map) * gap_boost
+    fig, ax = plt.subplots(figsize=(w, 1+len(cell_map)))
+    plt.text(0, 0, "\nNotebook quality report")
+    for k in cell_map:
+        plotter(cell_map[k], x, y, k)
+        x = x + 1
+
     ax.axis('off')
     plt.gca().invert_yaxis()
     
@@ -163,14 +152,14 @@ def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
                     fn = os.path.join(_path, _f)
                     cell_map = _nb_vis_parse_nb(fn)
                     if cell_map:
-                        nb_multidir_cell_map[fn] = cell_map
+                        nb_multidir_cell_map = {**nb_multidir_cell_map, fn: cell_map}
 
         return nb_multidir_cell_map
     
     if os.path.isdir(path):
         cell_map = _dir_walker(path)
     else:
-        cell_map = _nb_vis_parse_nb(path)
+        cell_map = {path: _nb_vis_parse_nb(path)}
         
     nb_vis(cell_map, img_file, linewidth, w, **kwargs)
 
