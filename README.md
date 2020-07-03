@@ -24,8 +24,8 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  chart  Display notebook profile chart.
-  
+  chart    Display notebook profile chart.
+  imports  Display notebook imports.
 ```
  
  Commands:
@@ -43,6 +43,18 @@ Options:
   --help                   Show this message and exit.
  ```
 
+So for example, to generate a chart of files in current directory:
+
+`nb_quality chart .`
+
+```
+Usage: nb_quality imports [OPTIONS] PATH
+
+  Display notebook imports.
+
+Options:
+  --help  Show this message and exit.
+  ```
 
 On a Mac, you may get a warning of the form:
 

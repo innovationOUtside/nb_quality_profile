@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="nb_quality_profile",
     packages=['nb_quality_profile'],
-    version='0.0.1',
+    version='0.1.0',
     author="Tony Hirst",
     author_email="tony.hirst@gmail.com",
     description="Tools for profiling Jupyter notebook quality and visualing notebook structure.",
@@ -14,7 +14,8 @@ setup(
     install_requires=[
         'click',
         'nbformat',
-        'matplotlib'
+        'matplotlib',
+        'list-imports',
     ],
     entry_points='''
         [console_scripts]

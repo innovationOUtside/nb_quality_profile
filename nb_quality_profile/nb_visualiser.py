@@ -21,7 +21,7 @@
 # +
 import math
 import matplotlib.pyplot as plt
-
+import list_imports
 
 def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey'):
     """Visualise notebook gross cell structure."""
@@ -102,8 +102,7 @@ import nbformat
 import os
 import textwrap
     
-def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
-                    #gap=None, gap_boost=1, gap):
+def nb_big_parse_nb(path):
     """Parse one or more notebooks on a path."""
     
     def _count_screen_lines(txt, width=LINE_WIDTH):
@@ -117,22 +116,31 @@ def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
         return n_screen_lines
     
     
-    def _nb_vis_parse_nb(fn):
+    def _nb_big_parse_nb(fn):
         """Parse a notebook and generate the nb_vis cell map for it."""
 
         cell_map = []
+        imports = []
 
         _fn, fn_ext = os.path.splitext(fn)
         if not fn_ext=='.ipynb' or not os.path.isfile(fn):
-            return cell_map
+            return cell_map, imports
 
         with open(fn,'r') as f:
             nb = nbformat.reads(f.read(), as_version=4)
 
         for cell in nb.cells:
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
+            if cell['cell_type']=='code':
+                # AST parser breaks on ipython magic, etc
+                clean_code = [c for c in cell['source'].split('\n') if not c.startswith(('!','%'))]
+                for code in clean_code:
+                    try:
+                        imports = imports + list_imports.parse(code)
+                    except:
+                        pass
 
-        return cell_map
+        return cell_map, list(set(imports))
 
     def _dir_walker(path, exclude = 'default'):
         """Profile all the notebooks in a specific directory and in any child directories."""
@@ -143,6 +151,7 @@ def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
             #If we set exclude, we need to pass it as a list
             exclude_paths = exclude
         nb_multidir_cell_map = {}
+        nb_multidir_imports = {}
         for _path, dirs, files in os.walk(path):
             #Start walking...
             #If we're in a directory that is not excluded...
@@ -150,19 +159,40 @@ def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
                 #Profile that directory...
                 for _f in files:
                     fn = os.path.join(_path, _f)
-                    cell_map = _nb_vis_parse_nb(fn)
+                    cell_map, imports = _nb_big_parse_nb(fn)
                     if cell_map:
                         nb_multidir_cell_map = {**nb_multidir_cell_map, fn: cell_map}
+                    if imports:
+                        nb_multidir_imports = {**nb_multidir_imports, fn: imports}
 
-        return nb_multidir_cell_map
+        return nb_multidir_cell_map, nb_multidir_imports
     
     if os.path.isdir(path):
-        cell_map = _dir_walker(path)
+        cell_map, imports = _dir_walker(path)
     else:
-        cell_map = {path: _nb_vis_parse_nb(path)}
-        
+        cell_map, imports =  _nb_big_parse_nb(path)
+        cell_map = {path: cell_map}
+        imports = {path: imports}
+    
+    return cell_map, imports
+
+
+def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
+    """Do a big parse and then chart the result."""
+    cell_map, _ = nb_big_parse_nb(path)
     nb_vis(cell_map, img_file, linewidth, w, **kwargs)
 
+
+def nb_imports_parse_nb(path):
+    """Do a big parse and then chart the result."""
+
+    _, imports = nb_big_parse_nb(path)
+    all_packages = []
+    for i in imports:
+        packages = [p.split('.')[0] for p in imports[i]]
+        all_packages = all_packages + packages
+        print(f"Imports in {i}: {', '.join(packages)}")
+    print(f"All imports: {', '.join(set(all_packages))}")
 # + tags=["active-ipynb"]
 # Test a single notebook mapper:
 
