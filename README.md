@@ -21,7 +21,12 @@ On the command line, cd to the desired directory and run:
 
 or pass in a directory path instead of `.`.
 
-The output file is saved as `nb_quality_review.png`  by default. Pass in another name via the `-o myimage.png` flag.
+#### Options
+
+
+- `--out / -o`: The output file is saved as `nb_quality_review.png`  by default. Pass in another name via the `-o myimage.png` flag;
+- `--gap / -g`: gap between bands (coloured grey)
+- `--linewidth / -l`: width of line;
 
 
 
