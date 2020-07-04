@@ -169,7 +169,9 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
             #If we're in a directory that is not excluded...
             if not set(exclude_paths).intersection(set(_path.split('/'))):
                 #Profile that directory...
-                for _f in files:
+                # TO DO  - the following is horrible
+                # Need to do this properly
+                for _f in sorted(files):
                     fn = os.path.join(_path, _f)
                     reports = _nb_big_parse_nb(fn, text_formats, **kwargs )
                     cell_map = reports['cell_map']
