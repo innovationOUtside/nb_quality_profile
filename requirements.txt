@@ -4,3 +4,5 @@ jupytext
 matplotlib
 
 list-imports
+
+readtime

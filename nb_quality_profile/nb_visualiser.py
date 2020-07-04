@@ -23,6 +23,7 @@ import math
 import matplotlib.pyplot as plt
 import list_imports
 import jupytext
+from .text_quality import md_readtime
 
 def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey'):
     """Visualise notebook gross cell structure."""
@@ -150,6 +151,8 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
                         imports = imports + list_imports.parse(code)
                     except:
                         pass
+            elif cell['cell_type']=='markdown':
+                text_report['reading_time'] += md_readtime(cell['source'], **kwargs)
         return { 'cell_map':cell_map, 'imports':list(set(imports)), 'text_report':text_report }
 
     def _dir_walker(path, exclude = 'default', text_formats=True):
@@ -223,6 +226,14 @@ def nb_imports_parse_nb(path='.', text_formats=True):
         all_packages = all_packages + packages
         print(f"Imports in {i}: {', '.join(packages)}")
     print(f"All imports: {', '.join(set(all_packages))}")
+
+
+def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False):
+    """Parse markdown text in notebook(s)."""
+    reports = nb_big_parse_nb(path, text_formats, reading_rate=reading_rate, rounded_minutes=rounded_minutes)
+    print(reports['text_report'])
+
+
 # + tags=["active-ipynb"]
 # Test a single notebook mapper:
 

@@ -1,5 +1,5 @@
 import click
-from .nb_visualiser import nb_vis_parse_nb, nb_imports_parse_nb
+from .nb_visualiser import nb_vis_parse_nb, nb_imports_parse_nb, nb_text_parse_nb
 
 @click.group()
 def cli():
@@ -29,3 +29,14 @@ def imports(path, text_formats):
 	"""Display notebook imports from provided file or directory path."""
 	click.echo('Using file/directory: {}'.format(path))
 	nb_imports_parse_nb(path, text_formats)
+
+@cli.command()
+@click.argument('path', type=click.Path(exists=True))
+@click.option('--text-formats/--no-text-formats', default=True,
+			   help="Enable/disable Jupytext support.")
+@click.option('--reading-rate', '-r', default=100, type=int, help='Words per minute.')
+@click.option('--rounded-minutes', '-R', is_flag=True, help='Round up to minutes.')
+def text_analysis(path, text_formats, reading_rate, rounded_minutes):
+	"""Report on text / markdown content."""
+	click.echo('Using file/directory: {}'.format(path))
+	nb_text_parse_nb(path, text_formats, reading_rate, rounded_minutes)
