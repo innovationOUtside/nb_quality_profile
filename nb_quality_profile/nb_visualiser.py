@@ -22,6 +22,7 @@
 import math
 import matplotlib.pyplot as plt
 import list_imports
+import jupytext
 
 def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey'):
     """Visualise notebook gross cell structure."""
@@ -104,7 +105,7 @@ import nbformat
 import os
 import textwrap
     
-def nb_big_parse_nb(path):
+def nb_big_parse_nb(path, text_formats=True):
     """Parse one or more notebooks on a path."""
     
     def _count_screen_lines(txt, width=LINE_WIDTH):
@@ -118,18 +119,24 @@ def nb_big_parse_nb(path):
         return n_screen_lines
     
     
-    def _nb_big_parse_nb(fn):
+    def _nb_big_parse_nb(fn, text_formats=True):
         """Parse a notebook and generate the nb_vis cell map for it."""
 
         cell_map = []
         imports = []
-
+        fmts = ['.ipynb']
+        if text_formats:
+            fmts = fmts + ['.md', '.Rmd', '.py']
         _fn, fn_ext = os.path.splitext(fn)
-        if not fn_ext=='.ipynb' or not os.path.isfile(fn):
+
+        if fn_ext not in fmts or not os.path.isfile(fn):
             return cell_map, imports
 
-        with open(fn,'r') as f:
-            nb = nbformat.reads(f.read(), as_version=4)
+        if fn_ext=='.ipynb':
+            with open(fn,'r') as f:
+                nb = nbformat.reads(f.read(), as_version=4)
+        else:
+            nb = jupytext.read(fn)
 
         for cell in nb.cells:
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
@@ -144,7 +151,7 @@ def nb_big_parse_nb(path):
 
         return cell_map, list(set(imports))
 
-    def _dir_walker(path, exclude = 'default'):
+    def _dir_walker(path, exclude = 'default', text_formats=True):
         """Profile all the notebooks in a specific directory and in any child directories."""
 
         if exclude == 'default':
@@ -161,7 +168,7 @@ def nb_big_parse_nb(path):
                 #Profile that directory...
                 for _f in files:
                     fn = os.path.join(_path, _f)
-                    cell_map, imports = _nb_big_parse_nb(fn)
+                    cell_map, imports = _nb_big_parse_nb(fn, text_formats )
                     if cell_map:
                         nb_multidir_cell_map = {**nb_multidir_cell_map, fn: cell_map}
                     if imports:
@@ -170,25 +177,25 @@ def nb_big_parse_nb(path):
         return nb_multidir_cell_map, nb_multidir_imports
     
     if os.path.isdir(path):
-        cell_map, imports = _dir_walker(path)
+        cell_map, imports = _dir_walker(path, text_formats=text_formats)
     else:
-        cell_map, imports =  _nb_big_parse_nb(path)
+        cell_map, imports =  _nb_big_parse_nb(path, text_formats)
         cell_map = {path: cell_map}
         imports = {path: imports}
     
     return cell_map, imports
 
 
-def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, **kwargs):
+def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, text_formats=True, **kwargs):
     """Do a big parse and then chart the result."""
-    cell_map, _ = nb_big_parse_nb(path)
+    cell_map, _ = nb_big_parse_nb(path, text_formats)
     nb_vis(cell_map, img_file, linewidth, w, **kwargs)
 
 
-def nb_imports_parse_nb(path):
+def nb_imports_parse_nb(path, text_formats=True):
     """Do a big parse and then chart the result."""
 
-    _, imports = nb_big_parse_nb(path)
+    _, imports = nb_big_parse_nb(path, text_formats)
     all_packages = []
     for i in imports:
         packages = [p.split('.')[0] for p in imports[i]]
