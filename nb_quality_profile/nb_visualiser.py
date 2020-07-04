@@ -105,7 +105,7 @@ import nbformat
 import os
 import textwrap
     
-def nb_big_parse_nb(path, text_formats=True):
+def nb_big_parse_nb(path, text_formats=True, **kwargs):
     """Parse one or more notebooks on a path."""
     
     def _count_screen_lines(txt, width=LINE_WIDTH):
@@ -119,18 +119,20 @@ def nb_big_parse_nb(path, text_formats=True):
         return n_screen_lines
     
     
-    def _nb_big_parse_nb(fn, text_formats=True):
+    def _nb_big_parse_nb(fn, text_formats=True, **kwargs):
         """Parse a notebook and generate the nb_vis cell map for it."""
 
         cell_map = []
         imports = []
+        text_report = {'reading_time':0}
         fmts = ['.ipynb']
         if text_formats:
             fmts = fmts + ['.md', '.Rmd', '.py']
         _fn, fn_ext = os.path.splitext(fn)
 
         if fn_ext not in fmts or not os.path.isfile(fn):
-            return cell_map, imports
+            # Better to return this as empty and check downstream?
+            return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
         if fn_ext=='.ipynb':
             with open(fn,'r') as f:
@@ -148,8 +150,7 @@ def nb_big_parse_nb(path, text_formats=True):
                         imports = imports + list_imports.parse(code)
                     except:
                         pass
-
-        return cell_map, list(set(imports))
+        return { 'cell_map':cell_map, 'imports':list(set(imports)), 'text_report':text_report }
 
     def _dir_walker(path, exclude = 'default', text_formats=True):
         """Profile all the notebooks in a specific directory and in any child directories."""
@@ -161,41 +162,59 @@ def nb_big_parse_nb(path, text_formats=True):
             exclude_paths = exclude
         nb_multidir_cell_map = {}
         nb_multidir_imports = {}
+        nb_multidir_text_report = {}
         for _path, dirs, files in os.walk(path):
             #Start walking...
+            # What about using dirs?
             #If we're in a directory that is not excluded...
             if not set(exclude_paths).intersection(set(_path.split('/'))):
                 #Profile that directory...
                 for _f in files:
                     fn = os.path.join(_path, _f)
-                    cell_map, imports = _nb_big_parse_nb(fn, text_formats )
+                    reports = _nb_big_parse_nb(fn, text_formats, **kwargs )
+                    cell_map = reports['cell_map']
+                    imports = reports['imports']
+                    text_report = reports['text_report']
                     if cell_map:
                         nb_multidir_cell_map = {**nb_multidir_cell_map, fn: cell_map}
                     if imports:
                         nb_multidir_imports = {**nb_multidir_imports, fn: imports}
+                    if text_report:
+                        nb_multidir_text_report = {**nb_multidir_text_report, fn: text_report}
 
-        return nb_multidir_cell_map, nb_multidir_imports
+        return {'cell_map':nb_multidir_cell_map, 'imports':nb_multidir_imports, "text_report":nb_multidir_text_report}
+        
     
+    # TO DO: this all needs simplifying and handling better
+    # Also: we need to be able to switch on and off which reports are run
+    # Need to thing about handling this properly eg in context of plugins
     if os.path.isdir(path):
-        cell_map, imports = _dir_walker(path, text_formats=text_formats)
+        reports = _dir_walker(path, text_formats=text_formats)
+        cell_map = reports['cell_map']
+        imports = reports['imports']
+        text_report = reports['text_report']
     else:
-        cell_map, imports =  _nb_big_parse_nb(path, text_formats)
-        cell_map = {path: cell_map}
-        imports = {path: imports}
+        reports =  _nb_big_parse_nb(path, text_formats, **kwargs)
+        
+        cell_map = {path: reports['cell_map']}
+        imports = {path: reports['imports']}
+        text_report = {path: reports['text_report']}
     
-    return cell_map, imports
+    return {"cell_map":cell_map, "imports":imports, "text_report": text_report}
 
 
-def nb_vis_parse_nb(path, img_file='', linewidth = 5, w=20, text_formats=True, **kwargs):
+def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True):
     """Do a big parse and then chart the result."""
-    cell_map, _ = nb_big_parse_nb(path, text_formats)
+    reports = nb_big_parse_nb(path, text_formats, **kwargs)
+    cell_map = reports["cell_map"]
     nb_vis(cell_map, img_file, linewidth, w, **kwargs)
 
 
-def nb_imports_parse_nb(path, text_formats=True):
+def nb_imports_parse_nb(path='.', text_formats=True):
     """Do a big parse and then chart the result."""
 
-    _, imports = nb_big_parse_nb(path, text_formats)
+    reports = nb_big_parse_nb(path, text_formats)
+    imports = reports["imports"]
     all_packages = []
     for i in imports:
         packages = [p.split('.')[0] for p in imports[i]]
