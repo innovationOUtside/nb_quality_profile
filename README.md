@@ -3,9 +3,14 @@ Simple tools for reviewing the quality of Jupyter notebooks.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_quality_profile/master?filepath=demo.ipynb)
 
-At the moment, only a couple of simple tools are provided: a utility to list package imports into one or more notebooks; and a visualisation of notebook structure (relative length, structure in terms of markdown vs code cell). Visualisations are of the form:
+At the moment, only a couple of simple tools are provided::
+
+- a utility to list package imports into one or more notebooks;
+- a visualisation of notebook structure (relative length, structure in terms of markdown vs code cell). Visualisations are of the form:
 
 ![](.images/simple_nb_viz.png)
+
+As well as reporting on `.ipynb` notebooks, reports can also be generated for other document formats that are convertable to the Jupyter notebook `.ipynb` using [`jupytext`](https://jupytext.readthedocs.io/en/latest/formats.html).
 
 ## Installation
 
@@ -33,27 +38,32 @@ Commands:
 ```
 Usage: nb_quality chart [OPTIONS] PATH
 
-  Display notebook profile chart.
+  Display notebook profile chart from provided file or directory path.
 
 Options:
-  -o, --out TEXT           Image outfile
-  -g, --gap FLOAT          Gap
-  -G, --gapcolor TEXT      Gap colour
-  -l, --linewidth INTEGER  Line width
-  --help                   Show this message and exit.
- ```
+  -o, --out TEXT                  Image outfile
+  -g, --gap FLOAT                 Gap
+  -G, --gapcolor TEXT             Gap colour
+  -l, --linewidth INTEGER         Line width
+  --text-formats / --no-text-formats
+                                  Enable/disable Jupytext support.
+  --help                          Show this message and exit.
+```
 
 So for example, to generate a chart of files in current directory:
 
 `nb_quality chart .`
 
+
 ```
 Usage: nb_quality imports [OPTIONS] PATH
 
-  Display notebook imports.
+  Display notebook imports from provided file or directory path.
 
 Options:
-  --help  Show this message and exit.
+  --text-formats / --no-text-formats
+                                  Enable/disable Jupytext support.
+  --help                          Show this message and exit.
   ```
 
 On a Mac, you may get a warning of the form:
