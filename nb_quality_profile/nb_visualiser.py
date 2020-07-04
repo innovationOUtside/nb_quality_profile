@@ -152,7 +152,10 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
                     except:
                         pass
             elif cell['cell_type']=='markdown':
-                text_report['reading_time'] += md_readtime(cell['source'], **kwargs)
+                text_report['reading_time'] += md_readtime(cell['source'], rounding_override=True, **kwargs)
+        if 'rounded_minutes' in kwargs and kwargs['rounded_minutes']:
+            if 'reading_time' in text_report:
+                text_report['reading_time'] =  math.ceil(text_report['reading_time']/60)
         return { 'cell_map':cell_map, 'imports':list(set(imports)), 'text_report':text_report }
 
     def _dir_walker(path, exclude = 'default', text_formats=True):
@@ -186,7 +189,6 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
                         nb_multidir_imports = {**nb_multidir_imports, fn: imports}
                     if text_report:
                         nb_multidir_text_report = {**nb_multidir_text_report, fn: text_report}
-
         return {'cell_map':nb_multidir_cell_map, 'imports':nb_multidir_imports, "text_report":nb_multidir_text_report}
         
     
