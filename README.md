@@ -3,9 +3,10 @@ Simple tools for reviewing the quality of Jupyter notebooks.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_quality_profile/master?filepath=demo.ipynb)
 
-At the moment, only a couple of simple tools are provided::
+At the moment, only a few of simple tools are provided::
 
 - a utility to list package imports into one or more notebooks;
+- a simple reading time estimator based on words-per-minute calculations against markdown cells (code cells ignored);
 - a visualisation of notebook structure (relative length, structure in terms of markdown vs code cell). Visualisations are of the form:
 
 ![](.images/simple_nb_viz.png)
@@ -31,6 +32,7 @@ Options:
 Commands:
   chart    Display notebook profile chart.
   imports  Display notebook imports.
+  text-analysis  Report on text / markdown content.
 ```
  
  Commands:
@@ -64,7 +66,22 @@ Options:
   --text-formats / --no-text-formats
                                   Enable/disable Jupytext support.
   --help                          Show this message and exit.
-  ```
+```
+
+Reading time (based solely on markdown; code cells ignored):
+
+```
+Usage: nb_quality text-analysis [OPTIONS] PATH
+
+  Report on text / markdown content.
+
+Options:
+  --text-formats / --no-text-formats
+                                  Enable/disable Jupytext support.
+  -r, --reading-rate INTEGER      Words per minute.
+  -R, --rounded-minutes           Round up to minutes.
+  --help                          Show this message and exit.
+```
 
 On a Mac, you may get a warning of the form:
 
