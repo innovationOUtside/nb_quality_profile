@@ -79,6 +79,8 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     gap = gap if gap is not None else get_gap(cell_map) * gap_boost
     fig, ax = plt.subplots(figsize=(w, 1+len(cell_map)))
     plt.text(0, 0, "\nNotebook quality report")
+    #Add a registration point to the plot
+    plt.plot([0,0],[0,0])
     for k in cell_map:
         plotter(cell_map[k], x, y, k)
         x = x + 1
