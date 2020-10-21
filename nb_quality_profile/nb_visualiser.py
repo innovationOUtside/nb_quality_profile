@@ -144,8 +144,8 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         text_report = {'reading_time':0}
           
         if raw:
-           nb = raw
-        elif not fn:
+            nb = raw
+        elif fn:
             fmts = ['.ipynb']
             if text_formats:
                 fmts = fmts + ['.md', '.Rmd', '.py']
@@ -161,7 +161,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
             else:
                 nb = jupytext.read(fn)
         else:
-           return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
+            return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
         for cell in nb.cells:
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
