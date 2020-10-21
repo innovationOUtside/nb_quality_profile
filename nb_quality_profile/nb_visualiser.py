@@ -164,7 +164,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
             return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
         for cell in nb.cells:
-            if cell not in VIS_COLOUR_MAP:
+            if cell['cell_type'] not in VIS_COLOUR_MAP:
                 continue
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
             if cell['cell_type']=='code':
