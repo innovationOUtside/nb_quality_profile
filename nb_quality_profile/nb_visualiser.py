@@ -143,7 +143,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         imports = []
         text_report = {'reading_time':0}
           
-        if not raw:
+        if raw:
            nb = raw
         elif not fn:
             fmts = ['.ipynb']
