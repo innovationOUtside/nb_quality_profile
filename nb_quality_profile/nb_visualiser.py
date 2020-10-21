@@ -22,11 +22,14 @@
 import math
 import matplotlib.pyplot as plt
 import list_imports
-from io import StringIO   
+from io import  BytesIO
+import base64  
 import jupytext
 from .text_quality import md_readtime
 
-def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey', retval=''):
+def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
+           gap_boost=1, gap_colour='lightgrey', retval='',
+           wordless=False, minimal=False, header_gap=0.2, dpi=80, **kwargs):
     """Visualise notebook gross cell structure."""
 
     def get_gap(cell_map):
@@ -58,10 +61,6 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     def plotter(cell_map, x, y, label='', header_gap = 0.2):
         """Plot visualisation of gross cell structure for a single notebook."""
 
-        #Plot notebook path
-        plt.text(y, x, label)
-        x = x + header_gap
-
         for _cell_map in cell_map:
 
             #Add a coloured bar between cells
@@ -80,12 +79,20 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     y = 0
     
     gap = gap if gap is not None else get_gap(cell_map) * gap_boost
-    fig, ax = plt.subplots(figsize=(w, 1+len(cell_map)))
-    plt.text(0, 0, "\nNotebook quality report")
+    h = 1+len(cell_map) if not minimal else len(cell_map)*linewidth/dpi
+    fig, ax = plt.subplots(figsize=(1200/dpi, h))
+    
+    if not wordless and not minimal:
+        plt.text(0, 0, "\nNotebook quality report")
+        
     #Add a registration point to the plot
     plt.plot([0,0],[0,0])
     for k in cell_map:
-        plotter(cell_map[k], x, y, k)
+        if not wordless and not minimal:
+            #Plot notebook path
+            plt.text(y, x, k)
+            x = x + header_gap
+        plotter(cell_map[k], x, y, k, header_gap=header_gap)
         x = x + 1
 
     ax.axis('off')
@@ -97,9 +104,10 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     if retval=='fig':
         return fig, ax
     elif retval=='img':
-        output = StringIO.StringIO()
-        plt.savefig.savefig(output, dpi=75)
-        return output.getvalue()
+        output = BytesIO()
+        plt.savefig(output, format="png")
+        # <img src="data:image/png;base64,{}"/>
+        return base64.encodebytes(output.getvalue()).decode()
 # -
 
 # Define the colour map for different cell types:
@@ -218,12 +226,13 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
     return {"cell_map":cell_map, "imports":imports, "text_report": text_report}
 
 
-def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, **kwargs):
+def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', **kwargs):
     """Do a big parse and then chart the result."""
     reports = nb_big_parse_nb(path, text_formats, **kwargs)
     cell_map = reports["cell_map"]
-    nb_vis(cell_map, img_file, linewidth, w, **kwargs)
-
+    response = nb_vis(cell_map, img_file, linewidth, w, retval=retval, **kwargs)
+    if retval:
+        return response
 
 def nb_imports_parse_nb(path='.', text_formats=True):
     """Do a big parse and then chart the result."""
