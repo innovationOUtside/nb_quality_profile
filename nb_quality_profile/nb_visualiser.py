@@ -22,7 +22,7 @@
 import math
 import matplotlib.pyplot as plt
 import list_imports
-import cStringIO
+from io import StringIO   
 import jupytext
 from .text_quality import md_readtime
 
@@ -97,7 +97,7 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     if retval=='fig':
         return fig, ax
     elif retval=='img':
-        output = cStringIO.StringIO()
+        output = StringIO.StringIO()
         plt.savefig.savefig(output, dpi=75)
         return output.getvalue()
 # -
