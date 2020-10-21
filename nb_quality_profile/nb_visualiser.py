@@ -217,7 +217,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
     # TO DO: this all needs simplifying and handling better
     # Also: we need to be able to switch on and off which reports are run
     # Need to thing about handling this properly eg in context of plugins
-    if os.path.isdir(path):
+    if not raw and os.path.isdir(path):
         reports = _dir_walker(path, text_formats=text_formats)
         cell_map = reports['cell_map']
         imports = reports['imports']
