@@ -25,7 +25,7 @@ import list_imports
 import jupytext
 from .text_quality import md_readtime
 
-def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey'):
+def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, gap_colour='lightgrey', retval=''):
     """Visualise notebook gross cell structure."""
 
     def get_gap(cell_map):
@@ -92,6 +92,11 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None, gap_boost=1, ga
     
     if img_file:
         plt.savefig(img_file)
+    
+    if retval=='fig':
+        return fig, ax
+    elif retval=='img':
+        return img_file
 # -
 
 # Define the colour map for different cell types:
