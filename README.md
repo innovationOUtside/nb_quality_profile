@@ -15,6 +15,10 @@ As well as reporting on `.ipynb` notebooks, reports can also be generated for ot
 
 ## Installation
 
+Install from pip:
+
+`pip install nb_quality_profile`
+
 Install from this repo:
 
 `pip install git+https://github.com/innovationOUtside/nb_quality_profile.git`
