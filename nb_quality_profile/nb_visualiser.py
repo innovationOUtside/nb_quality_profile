@@ -122,7 +122,7 @@ import nbformat
 import os
 import textwrap
     
-def nb_big_parse_nb(path, text_formats=True, **kwargs):
+def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
     """Parse one or more notebooks on a path."""
     
     def _count_screen_lines(txt, width=LINE_WIDTH):
@@ -136,26 +136,32 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
         return n_screen_lines
     
     
-    def _nb_big_parse_nb(fn, text_formats=True, **kwargs):
+    def _nb_big_parse_nb(fn='.', text_formats=True, raw='', **kwargs):
         """Parse a notebook and generate the nb_vis cell map for it."""
 
         cell_map = []
         imports = []
         text_report = {'reading_time':0}
-        fmts = ['.ipynb']
-        if text_formats:
-            fmts = fmts + ['.md', '.Rmd', '.py']
-        _fn, fn_ext = os.path.splitext(fn)
+          
+        if not raw:
+           nb = raw
+        elif not fn:
+            fmts = ['.ipynb']
+            if text_formats:
+                fmts = fmts + ['.md', '.Rmd', '.py']
+            _fn, fn_ext = os.path.splitext(fn)
 
-        if fn_ext not in fmts or not os.path.isfile(fn):
-            # Better to return this as empty and check downstream?
-            return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
+            if fn_ext not in fmts or not os.path.isfile(fn):
+                # Better to return this as empty and check downstream?
+                return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
-        if fn_ext=='.ipynb':
-            with open(fn,'r') as f:
-                nb = nbformat.reads(f.read(), as_version=4)
+            if fn_ext=='.ipynb':
+                with open(fn,'r') as f:
+                    nb = nbformat.reads(f.read(), as_version=4)
+            else:
+                nb = jupytext.read(fn)
         else:
-            nb = jupytext.read(fn)
+           return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
         for cell in nb.cells:
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
@@ -174,7 +180,7 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
                 text_report['reading_time'] =  math.ceil(text_report['reading_time']/60)
         return { 'cell_map':cell_map, 'imports':list(set(imports)), 'text_report':text_report }
 
-    def _dir_walker(path, exclude = 'default', text_formats=True):
+    def _dir_walker(path='.', exclude = 'default', text_formats=True):
         """Profile all the notebooks in a specific directory and in any child directories."""
 
         if exclude == 'default':
@@ -195,7 +201,7 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
                 # Need to do this properly
                 for _f in sorted(files):
                     fn = os.path.join(_path, _f)
-                    reports = _nb_big_parse_nb(fn, text_formats, **kwargs )
+                    reports = _nb_big_parse_nb(fn, text_formats **kwargs )
                     cell_map = reports['cell_map']
                     imports = reports['imports']
                     text_report = reports['text_report']
@@ -217,7 +223,7 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
         imports = reports['imports']
         text_report = reports['text_report']
     else:
-        reports =  _nb_big_parse_nb(path, text_formats, **kwargs)
+        reports =  _nb_big_parse_nb(path, text_formats, raw=raw, **kwargs)
         
         cell_map = {path: reports['cell_map']}
         imports = {path: reports['imports']}
@@ -226,18 +232,18 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
     return {"cell_map":cell_map, "imports":imports, "text_report": text_report}
 
 
-def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', **kwargs):
+def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', raw='', **kwargs):
     """Do a big parse and then chart the result."""
-    reports = nb_big_parse_nb(path, text_formats, **kwargs)
+    reports = nb_big_parse_nb(path, text_formats, raw=raw, **kwargs)
     cell_map = reports["cell_map"]
     response = nb_vis(cell_map, img_file, linewidth, w, retval=retval, **kwargs)
     if retval:
         return response
 
-def nb_imports_parse_nb(path='.', text_formats=True):
+def nb_imports_parse_nb(path='.', text_formats=True, raw=''):
     """Do a big parse and then chart the result."""
 
-    reports = nb_big_parse_nb(path, text_formats)
+    reports = nb_big_parse_nb(path, text_formats, raw=raw)
     imports = reports["imports"]
     all_packages = []
     for i in imports:
@@ -247,9 +253,9 @@ def nb_imports_parse_nb(path='.', text_formats=True):
     print(f"All imports: {', '.join(set(all_packages))}")
 
 
-def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False):
+def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False, raw=''):
     """Parse markdown text in notebook(s)."""
-    reports = nb_big_parse_nb(path, text_formats, reading_rate=reading_rate, rounded_minutes=rounded_minutes)
+    reports = nb_big_parse_nb(path, text_formats, reading_rate=reading_rate, rounded_minutes=rounded_minutes, raw=raw)
     print(reports['text_report'])
 
 
