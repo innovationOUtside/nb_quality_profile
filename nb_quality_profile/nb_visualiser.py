@@ -218,7 +218,7 @@ def nb_big_parse_nb(path, text_formats=True, **kwargs):
     return {"cell_map":cell_map, "imports":imports, "text_report": text_report}
 
 
-def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True):
+def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, **kwargs):
     """Do a big parse and then chart the result."""
     reports = nb_big_parse_nb(path, text_formats, **kwargs)
     cell_map = reports["cell_map"]
