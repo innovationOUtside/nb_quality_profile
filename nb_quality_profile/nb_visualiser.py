@@ -112,7 +112,7 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
 
 # Define the colour map for different cell types:
 
-VIS_COLOUR_MAP  = {'markdown':'cornflowerblue','code':'pink'}
+VIS_COLOUR_MAP  = {'markdown':'cornflowerblue', 'code':'pink', 'raw':'orange'}
 LINE_WIDTH = 160
 
 # The following function will find one or more notebooks on a path and generate cell maps for each of them. All the cell maps are then passed for visualisation on the same canvas.
@@ -164,6 +164,8 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
             return { 'cell_map':{}, 'imports':{}, 'text_report':{}}
 
         for cell in nb.cells:
+            if cell not in VIS_COLOUR_MAP:
+                continue
             cell_map.append((_count_screen_lines(cell['source']), VIS_COLOUR_MAP[cell['cell_type']]))
             if cell['cell_type']=='code':
                 # AST parser breaks on ipython magic, etc
