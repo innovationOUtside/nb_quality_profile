@@ -95,6 +95,7 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
         plotter(cell_map[k], x, y, k, header_gap=header_gap)
         x = x + 1
 
+    plt.ioff()
     ax.axis('off')
     plt.gca().invert_yaxis()
     
@@ -106,6 +107,7 @@ def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
     elif retval=='img':
         output = BytesIO()
         plt.savefig(output, format="png")
+        plt.close(fig)
         # <img src="data:image/png;base64,{}"/>
         return base64.encodebytes(output.getvalue()).decode()
 # -
