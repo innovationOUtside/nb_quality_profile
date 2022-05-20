@@ -505,7 +505,7 @@ def r_analyze(c):
             n_single_line_comment_code_lines, n_code_lines)
 
 
-# We can then siple call `r_analyze()` function with a code string:
+# We can then simply call `r_analyze()` function with a code string:
 
 # + tags=["active-ipynb"]
 # for c in extract_from_buffer(io.StringIO(mc)):
@@ -605,6 +605,7 @@ def process_extras(doc):
 def process_notebook_full_md(nb):
     """Given a notebook, return all the markdown cell content as one string,
         and all the code cell content as another string."""
+    
     txt = []
     code = []
     for cell in nb.cells:
@@ -653,16 +654,18 @@ def process_notebook_md_doc(doc):
 # +
 import markdown
 from lxml import etree
+from pathlib import Path
+from nbformat.notebooknode import NotebookNode
 
 def make_html_tree(md):
     """Generate etree HTML structure from markdown text."""
-    html_tree = etree.fromstring(markdown.markdown(md))
+    html_tree = etree.fromstring(f"<div>{markdown.markdown(md)}</div>")
     return html_tree
 
 def get_images(html_tree):
     """Extract images and alt text from HTML tree."""
     images = []
-    for img in doc.xpath('//img'):
+    for img in html_tree.xpath('//img'):
         images.append((img.get('src'), img.get('alt')))
 
     return images
@@ -670,20 +673,47 @@ def get_images(html_tree):
 def get_links(html_tree):
     """Extract links and link text from HTML tree."""
     links = []
-    for link in doc.xpath('//a'):
+    for link in html_tree.xpath('//a'):
         links.append((link.text, link.get('href')))
 
     return links
 
+def get_nb(nb):
+    """Get notebook."""
+    def _read_as_notebook(nb):
+        """Read notebook from file."""
+        # Have we been provided a path to a file?
+        path = Path(nb)
+        if path.is_file():
+            with open(path) as f:
+                nb = nbformat.reads(f.read(), as_version=4)
+        return nb
+
+    nb = nb if isinstance(nb, NotebookNode) else _read_as_notebook(nb)
+    return nb
+
+def nb_md_links_and_images(nb):
+    """Extract links and images from notebook."""
+    nb = get_nb(nb)
+    full_doc, full_code = process_notebook_full_md(nb)
+    html_ = make_html_tree(full_doc.text)
+
+    return get_images(html_), get_links(html_)
+
 
 # + tags=["active-ipynb"]
-# body_markdown = "This is an ![alt-text](./broke.png) [inline link](http://google.com). This is a [non inline link][1]\r\n\r\n  [1]: http://yahoo.com"
+# body_markdown = "This is an ![alt-text](./broke.png) [my inline link](http://google.com). This is a [non inline link][1]\r\n\r\n  [1]: http://yahoo.com"
 #
 # html_ = make_html_tree(body_markdown)
 #
 # print(get_images(html_))
 # print(get_links(html_))
 # #full_doc
+
+# + tags=["acive-ipynb"]
+nb_md_links_and_images(TEST_NOTEBOOK)
+
+
 # -
 
 # #### Summarised Cell Level Reporting

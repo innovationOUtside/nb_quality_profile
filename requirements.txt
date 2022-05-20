@@ -4,6 +4,9 @@ click
 
 deepmerge
 
+lxml
+markdown
+
 matplotlib
 
 spacy
