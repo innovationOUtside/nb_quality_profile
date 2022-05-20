@@ -646,6 +646,46 @@ def process_notebook_md_doc(doc):
 # process_notebook_md_doc(full_doc)
 # -
 
+# #### Check Images
+#
+# Using the monolithic markdown blob, we can parse the markdown to HTML and then process it to extract links, images etc.
+
+# +
+import markdown
+from lxml import etree
+
+def make_html_tree(md):
+    """Generate etree HTML structure from markdown text."""
+    html_tree = etree.fromstring(markdown.markdown(md))
+    return html_tree
+
+def get_images(html_tree):
+    """Extract images and alt text from HTML tree."""
+    images = []
+    for img in doc.xpath('//img'):
+        images.append((img.get('src'), img.get('alt')))
+
+    return images
+
+def get_links(html_tree):
+    """Extract links and link text from HTML tree."""
+    links = []
+    for link in doc.xpath('//a'):
+        links.append((link.text, link.get('href')))
+
+    return links
+
+
+# + tags=["active-ipynb"]
+# body_markdown = "This is an ![alt-text](./broke.png) [inline link](http://google.com). This is a [non inline link][1]\r\n\r\n  [1]: http://yahoo.com"
+#
+# html_ = make_html_tree(body_markdown)
+#
+# print(get_images(html_))
+# print(get_links(html_))
+# #full_doc
+# -
+
 # #### Summarised Cell Level Reporting
 #
 # For the summarised cell level reporting, generate measures on a per cell basis and then calculate summary statistics over those.
