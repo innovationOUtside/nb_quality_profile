@@ -2,8 +2,14 @@ nbformat
 jupytext
 click
 
+deepmerge
+
 matplotlib
 
-list-imports
-
+spacy
+textacy
 readtime
+
+list-imports
+pytest-codeblocks
+radon
