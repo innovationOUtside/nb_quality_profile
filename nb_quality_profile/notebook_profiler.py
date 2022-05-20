@@ -734,7 +734,20 @@ def nb_md_links_and_images(nb):
 # + tags=["active-ipynb"]
 # nb_md_links_and_images(TEST_NOTEBOOK)
 # TEST_DIR = '../tm351-undercertainty/notebooks/tm351/Part 02 Notebooks'
-# nb_md_links_and_images(TEST_DIR)
+# test_links_images = nb_md_links_and_images(TEST_DIR)
+# test_links_images
+# -
+
+# Test links for liveness by reusing elements of https://github.com/innovationOUtside/ouxml-link-checker:
+
+# + tags=["active-ipynb"]
+# from ouxml_link_checker import link_checker as olc
+#
+# test_links = list({l[1] for li in test_links_images for l in li['links'] if l[1].startswith('http')})
+# #test_links
+#
+# reps = olc.check_multiple_links(test_links)
+# reps
 # -
 
 # #### Summarised Cell Level Reporting
