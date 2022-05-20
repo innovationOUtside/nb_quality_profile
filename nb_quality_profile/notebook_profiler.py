@@ -694,11 +694,31 @@ def get_nb(nb):
 
 def nb_md_links_and_images(nb):
     """Extract links and images from notebook."""
-    nb = get_nb(nb)
-    full_doc, full_code = process_notebook_full_md(nb)
-    html_ = make_html_tree(full_doc.text)
+    def _nb_report(_nb):
+        """Get report for a single notebook."""
+        nb = get_nb(_nb)
+        full_doc, full_code = process_notebook_full_md(nb)
+        html_ = make_html_tree(full_doc.text)
+    
+        return {"notebook": "RAW" if isinstance(_nb, NotebookNode) else str(_nb),
+                "images": get_images(html_),
+                "links": get_links(html_)
+               }
+        
+    retvals = []
+    
+    # If we are passed a directory path,
+    # let's recursively iterate through it
+    # and look for notebooks
+    # We could perhaps genearalise more and also allow md files
+    # perhaps parsing to NotebookNode using jupytext?
+    if Path(nb).is_dir():
+        for p in Path(nb).rglob("*.ipynb"):
+            retvals.append(_nb_report(p))
+    else:
+        retvals.append(_nb_report(nb))
 
-    return get_images(html_), get_links(html_)
+    return retvals
 
 
 # + tags=["active-ipynb"]
@@ -710,10 +730,8 @@ def nb_md_links_and_images(nb):
 # print(get_links(html_))
 # #full_doc
 
-# + tags=["acive-ipynb"]
-nb_md_links_and_images(TEST_NOTEBOOK)
-
-
+# + tags=["active-ipynb"]
+# nb_md_links_and_images(TEST_NOTEBOOK)
 # -
 
 # #### Summarised Cell Level Reporting
