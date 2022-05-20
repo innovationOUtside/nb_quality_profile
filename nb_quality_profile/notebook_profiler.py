@@ -714,7 +714,8 @@ def nb_md_links_and_images(nb):
     # perhaps parsing to NotebookNode using jupytext?
     if Path(nb).is_dir():
         for p in Path(nb).rglob("*.ipynb"):
-            retvals.append(_nb_report(p))
+            if '.ipynb_checkpoints' not in p.parts:
+                retvals.append(_nb_report(p))
     else:
         retvals.append(_nb_report(nb))
 
@@ -732,6 +733,8 @@ def nb_md_links_and_images(nb):
 
 # + tags=["active-ipynb"]
 # nb_md_links_and_images(TEST_NOTEBOOK)
+# TEST_DIR = '../tm351-undercertainty/notebooks/tm351/Part 02 Notebooks'
+# nb_md_links_and_images(TEST_DIR)
 # -
 
 # #### Summarised Cell Level Reporting
@@ -858,8 +861,6 @@ def nb_multidir_profiler(path, exclude = 'default'):
 
 
 # + tags=["active-ipynb"]
-# TEST_DIR = '../tm351-undercertainty/notebooks/tm351/Part 02 Notebooks'
-#
 # ddf = nb_multidir_profiler(TEST_DIR)
 # ddf.head()
 # -
