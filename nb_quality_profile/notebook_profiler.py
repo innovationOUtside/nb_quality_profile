@@ -710,10 +710,10 @@ def nb_md_links_and_images(nb):
     # If we are passed a directory path,
     # let's recursively iterate through it
     # and look for notebooks
-    # We could perhaps genearalise more and also allow md files
+    # We could perhaps generalise more and also allow md files
     # perhaps parsing to NotebookNode using jupytext?
     if Path(nb).is_dir():
-        for p in Path(nb).rglob("*.ipynb"):
+        for p in sorted(Path(nb).rglob("*.ipynb")):
             if '.ipynb_checkpoints' not in p.parts:
                 retvals.append(_nb_report(p))
     else:

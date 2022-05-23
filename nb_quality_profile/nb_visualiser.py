@@ -26,6 +26,7 @@ from io import  BytesIO
 import base64  
 import jupytext
 from .text_quality import md_readtime
+from pathlib import Path
 
 def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
            gap_boost=1, gap_colour='lightgrey', retval='',
@@ -195,17 +196,14 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         nb_multidir_cell_map = {}
         nb_multidir_imports = {}
         nb_multidir_text_report = {}
-        for _path, dirs, files in os.walk(path):
+        path = Path(path)
+        if not path.is_dir():
+            return
+        for fn in path.rglob("*.ipynb"):
             #Start walking...
-            # What about using dirs?
-            #If we're in a directory that is not excluded...
-            if not set(exclude_paths).intersection(set(_path.split('/'))):
+            if not set(exclude_paths).intersection(set(fn.parts)):
                 #Profile that directory...
-                # TO DO  - the following is horrible
-                # Need to do this properly
-                for _f in sorted(files):
-                    fn = os.path.join(_path, _f)
-                    reports = _nb_big_parse_nb(fn, text_formats **kwargs )
+                    reports = _nb_big_parse_nb(fn, text_formats, **kwargs )
                     cell_map = reports['cell_map']
                     imports = reports['imports']
                     text_report = reports['text_report']
@@ -215,12 +213,12 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
                         nb_multidir_imports = {**nb_multidir_imports, fn: imports}
                     if text_report:
                         nb_multidir_text_report = {**nb_multidir_text_report, fn: text_report}
-        return {'cell_map':nb_multidir_cell_map, 'imports':nb_multidir_imports, "text_report":nb_multidir_text_report}
+        return {"cell_map": nb_multidir_cell_map,
+                "imports": nb_multidir_imports,
+                "text_report": nb_multidir_text_report}
         
-    
-    # TO DO: this all needs simplifying and handling better
     # Also: we need to be able to switch on and off which reports are run
-    # Need to thing about handling this properly eg in context of plugins
+    # Need to think about handling this properly e.g. in context of plugins
     if not raw and os.path.isdir(path):
         reports = _dir_walker(path, text_formats=text_formats)
         cell_map = reports['cell_map']
@@ -233,7 +231,9 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         imports = {path: reports['imports']}
         text_report = {path: reports['text_report']}
     
-    return {"cell_map":cell_map, "imports":imports, "text_report": text_report}
+    return {"cell_map": cell_map,
+            "imports": imports,
+            "text_report": text_report}
 
 
 def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', raw='', **kwargs):
@@ -244,8 +244,9 @@ def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=Tru
     if retval:
         return response
 
-def nb_imports_parse_nb(path='.', text_formats=True, raw=''):
-    """Do a big parse and then chart the result."""
+def nb_imports_parse_nb(path='.', text_formats=True,
+                        raw='', installed=True):
+    """Do a big parse and then print the result."""
 
     reports = nb_big_parse_nb(path, text_formats, raw=raw)
     imports = reports["imports"]
@@ -254,7 +255,20 @@ def nb_imports_parse_nb(path='.', text_formats=True, raw=''):
         packages = [p.split('.')[0] for p in imports[i]]
         all_packages = all_packages + packages
         print(f"Imports in {i}: {', '.join(packages)}")
-    print(f"All imports: {', '.join(set(all_packages))}")
+    all_packages = set(all_packages)
+    print(f"All imports: {', '.join(all_packages)}")
+    if installed:
+        import importlib
+        fails = [p for p in all_packages if not importlib.util.find_spec(p)]
+        if fails:
+            print(f"The following packages cannot be imported: {''.join(fails)}")
+        else:
+            print("All packages can be imported.")
+
+    # For package details:
+    #import pkg_resources
+    #print([p.project_name for p in pkg_resources.working_set])
+    # We can also pull out things like package requirements, etc.
 
 
 def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False, raw=''):

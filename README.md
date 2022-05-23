@@ -72,6 +72,30 @@ Options:
   --help                          Show this message and exit.
 ```
 
+Check links (note: links included as "free text" are currently ignored):
+
+```
+Usage: nb_quality link-check [OPTIONS] PATH
+
+  Check links.
+
+Options:
+  --all-links         Display all links.
+  --grab-screenshots  Grab screenshots.
+  --help              Show this message and exit.
+```
+
+Check image alt text:
+
+```
+Usage: nb_quality alt-tags [OPTIONS] PATH
+
+  Check image alt text.
+
+Options:
+  --help  Show this message and exit.
+```
+
 Reading time (based solely on markdown; code cells ignored):
 
 ```
