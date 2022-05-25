@@ -96,6 +96,17 @@ Options:
   --help  Show this message and exit.
 ```
 
+Check for errors and warnings (`stderr` messages in code cell outputs):
+
+```
+Usage: nb_quality check-warnings [OPTIONS] PATH
+
+  Check code output cells for warnings.
+
+Options:
+  --help  Show this message and exit.
+```
+
 Reading time (based solely on markdown; code cells ignored):
 
 ```
