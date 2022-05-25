@@ -2,6 +2,7 @@ import click
 from .nb_visualiser import nb_vis_parse_nb, nb_imports_parse_nb, nb_text_parse_nb
 
 from pathlib import Path
+import urllib
 
 @click.group()
 def cli():
@@ -45,20 +46,54 @@ def text_analysis(path, text_formats, reading_rate, rounded_minutes):
 
 @cli.command()
 @click.argument('path', type=click.Path(exists=True))
-def alt_tags(path):
+@click.option('--grab-images', is_flag=True, help="Grab images.")
+@click.option('--report', is_flag=True, help="Save image report.")
+def alt_tags(path, grab_images, report):
 	"""Check image alt text."""
 	from .notebook_profiler import nb_md_links_and_images
 
 	click.echo('\nChecking image alt text for documents in file/directory: {}'.format(path))
+	
 	retvals = nb_md_links_and_images(path)
 	missing_alt_text=[]
 	if not retvals:
 		click.echo('\nNo images found in any of the notebooks.')
 		return
+	
+	grab_images = grab_images or report
 
+	if grab_images:
+		img_path = Path("grab_images")
+		img_path.mkdir(parents=True, exist_ok=True)
+
+	biglist = []
 	for nb in retvals:
 		_missing_alt_text = [(nb["notebook"], i) for i in nb["images"] if not i[1]]
 		missing_alt_text.extend(_missing_alt_text)
+		if grab_images:
+			nb_path = Path(nb["notebook"]).resolve().parent
+			for i in nb["images"]:
+				src = nb_path / i[0]
+				dest = img_path / i[0]
+				if i[0].startswith("http"):
+					urllib.urlretrieve(i[0], dest)
+				else:
+					if src.is_file():
+						# We could also check it is an image file
+						dest.write_bytes(src.read_bytes())
+
+		if report:
+			for i in nb["images"]:
+				biglist.append([nb["notebook"], i[1], src, dest,
+				 f'![{i[1]}]({dest})'])
+			report_fn = "nb_images_report.md"
+
+	if report:
+		from tabulate import tabulate
+		with open(report_fn, 'w') as f:
+			f.write(tabulate(biglist,
+					headers=["notebook", "path", "src", "dest", "img" ],
+					tablefmt='github'))
 
 	if missing_alt_text:
 		click.echo('\nMissing alt text:')
@@ -135,7 +170,7 @@ def link_check(path, all_links, grab_screenshots):
 		shot_urls = list({l[1] for l in links})
 
 		from playwright.sync_api import sync_playwright
-		img_path = "link_images"
+		img_path = "grab_link_screenshots"
 		p = Path(img_path)
 		p.mkdir(parents=True, exist_ok=True)
 		with sync_playwright() as p:
@@ -149,3 +184,9 @@ def link_check(path, all_links, grab_screenshots):
 					click.echo(f"\t- failed to grab screenshot for {shot_url}")
 				browser.close()
 			click.echo(f"\nScreenshots saved to {img_path}")
+
+@cli.command()
+@click.argument('path', type=click.Path(exists=True))
+def warning_check(path):
+	"""Check code output cells for warnings."""
+	

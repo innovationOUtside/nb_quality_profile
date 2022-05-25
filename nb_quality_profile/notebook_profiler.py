@@ -659,7 +659,12 @@ from nbformat.notebooknode import NotebookNode
 
 def make_html_tree(md):
     """Generate etree HTML structure from markdown text."""
-    html_tree = etree.fromstring(f"<div>{markdown.markdown(md)}</div>")
+    try:
+        html_tree = etree.fromstring(f"<div>{markdown.markdown(md)}</div>")
+    except:
+        #print(f"<div>{markdown.markdown(md)}</div>")
+        print(f"Error parsing markdown...")
+        html_tree = None
     return html_tree
 
 def get_images(html_tree):
@@ -684,9 +689,12 @@ def get_nb(nb):
         """Read notebook from file."""
         # Have we been provided a path to a file?
         path = Path(nb)
-        if path.is_file():
+        if path.is_file() and path.suffix == '.ipynb':
+            print(path)
             with open(path) as f:
                 nb = nbformat.reads(f.read(), as_version=4)
+        else:
+            nb = None
         return nb
 
     nb = nb if isinstance(nb, NotebookNode) else _read_as_notebook(nb)
@@ -697,16 +705,24 @@ def nb_md_links_and_images(nb):
     def _nb_report(_nb):
         """Get report for a single notebook."""
         nb = get_nb(_nb)
+        if not nb:
+            return {"notebook": None, "images": [], "links": []}
+
         full_doc, full_code = process_notebook_full_md(nb)
         html_ = make_html_tree(full_doc.text)
-    
+        if html_ is None:
+            print(f"Error parsing HTML tree for {_nb}")
+            return {"notebook": "RAW" if isinstance(_nb, NotebookNode) else str(_nb),
+                "images": [],
+                "links": []}
+
         return {"notebook": "RAW" if isinstance(_nb, NotebookNode) else str(_nb),
                 "images": get_images(html_),
                 "links": get_links(html_)
                }
         
     retvals = []
-    
+
     # If we are passed a directory path,
     # let's recursively iterate through it
     # and look for notebooks
@@ -721,6 +737,24 @@ def nb_md_links_and_images(nb):
 
     return retvals
 
+
+# -
+
+def get_warnings(nb):
+    """Iterate code cell outputs to identify std_error outputs."""
+    _nb = get_nb(nb)
+    warnings = []
+    for i, cell in enumerate(_nb["cells"]):
+        if "outputs" in cell:
+            for output in cell["outputs"]:
+                if output["name"] == "stderr":
+                    msg = output["text"]
+                    warnings.append((i+1, nb, msg))
+    return warnings
+
+
+# + tags=["active-ipynb"]
+# get_warnings("delme-warnings.ipynb")
 
 # + tags=["active-ipynb"]
 # body_markdown = "This is an ![alt-text](./broke.png) [my inline link](http://google.com). This is a [non inline link][1]\r\n\r\n  [1]: http://yahoo.com"
