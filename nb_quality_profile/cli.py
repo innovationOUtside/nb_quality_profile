@@ -187,6 +187,8 @@ def link_check(path, all_links, grab_screenshots):
 
 @cli.command()
 @click.argument('path', type=click.Path(exists=True))
-def warning_check(path):
+def check_warnings(path):
 	"""Check code output cells for warnings."""
-	
+	from .notebook_profiler import get_warnings
+
+	click.echo(get_warnings(path))

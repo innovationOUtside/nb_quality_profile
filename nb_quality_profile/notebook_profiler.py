@@ -683,14 +683,15 @@ def get_links(html_tree):
 
     return links
 
-def get_nb(nb):
+def get_nb(nb, display_path=True):
     """Get notebook."""
     def _read_as_notebook(nb):
         """Read notebook from file."""
         # Have we been provided a path to a file?
         path = Path(nb)
         if path.is_file() and path.suffix == '.ipynb':
-            print(path)
+            if display_path:
+                print(path)
             with open(path) as f:
                 nb = nbformat.reads(f.read(), as_version=4)
         else:
