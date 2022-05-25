@@ -742,19 +742,29 @@ def nb_md_links_and_images(nb):
 
 def get_warnings(nb):
     """Iterate code cell outputs to identify std_error outputs."""
-    _nb = get_nb(nb)
+    def _get_warnings(nb):
+        _nb = get_nb(nb)
+        _warnings = []
+        for i, cell in enumerate(_nb["cells"]):
+            if "outputs" in cell:
+                for output in cell["outputs"]:
+                    if "name" in output and output["name"] == "stderr":
+                        msg = output["text"]
+                        _warnings.append((i+1, nb, msg))
+        return _warnings
     warnings = []
-    for i, cell in enumerate(_nb["cells"]):
-        if "outputs" in cell:
-            for output in cell["outputs"]:
-                if output["name"] == "stderr":
-                    msg = output["text"]
-                    warnings.append((i+1, nb, msg))
+    if Path(nb).is_dir():
+        for p in sorted(Path(nb).rglob("*.ipynb")):
+            if '.ipynb_checkpoints' not in p.parts:
+                warnings.extend(_get_warnings(p))
+    else:
+        warnings.extend(_get_warnings(nb))
+
     return warnings
 
 
 # + tags=["active-ipynb"]
-# get_warnings("delme-warnings.ipynb")
+# get_warnings(".")
 
 # + tags=["active-ipynb"]
 # body_markdown = "This is an ![alt-text](./broke.png) [my inline link](http://google.com). This is a [non inline link][1]\r\n\r\n  [1]: http://yahoo.com"
