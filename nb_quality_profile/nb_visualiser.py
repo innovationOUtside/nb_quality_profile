@@ -199,7 +199,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         path = Path(path)
         if not path.is_dir():
             return
-        for fn in path.rglob("*.ipynb"):
+        for fn in sorted(path.rglob("*.ipynb")):
             #Start walking...
             if not set(exclude_paths).intersection(set(fn.parts)):
                 #Profile that directory...
