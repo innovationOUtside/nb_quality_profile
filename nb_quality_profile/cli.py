@@ -188,8 +188,17 @@ def link_check(path, all_links, grab_screenshots):
 
 @cli.command()
 @click.argument('path', type=click.Path(exists=True))
-def check_warnings(path):
+@click.option('--out', '-o', default="warnings_report.html",  help='Report outfile')
+def check_warnings(path, out):
 	"""Check code output cells for warnings."""
 	from .notebook_profiler import get_warnings
 
-	click.echo(get_warnings(path))
+	if out:
+		from tabulate import tabulate
+		with Path(out).open('w') as f:
+			f.write(tabulate(get_warnings(path), 
+					headers=["path", "cell", "source", "warning"],
+					tablefmt='unsafehtml'))
+		click.echo(f"Report saved to: {out}")
+	else:
+		click.echo(get_warnings(path))

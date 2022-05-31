@@ -750,8 +750,10 @@ def get_warnings(nb):
             if "outputs" in cell:
                 for output in cell["outputs"]:
                     if "name" in output and output["name"] == "stderr":
-                        msg = output["text"]
-                        _warnings.append((i+1, nb, msg))
+                        msg = output["text"].split("\n")[0]
+                        _warnings.append((nb, i+1,
+                                          f'<pre><code>{cell["source"]}</code></pre>',
+                                          msg))
         return _warnings
     warnings = []
     if Path(nb).is_dir():

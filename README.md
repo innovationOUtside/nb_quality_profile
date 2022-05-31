@@ -60,6 +60,7 @@ So for example, to generate a chart of files in current directory:
 
 `nb_quality chart .`
 
+Check package imports:
 
 ```
 Usage: nb_quality imports [OPTIONS] PATH
@@ -71,6 +72,8 @@ Options:
                                   Enable/disable Jupytext support.
   --help                          Show this message and exit.
 ```
+
+The *imports* report also generates a scatterplot (`packages.png`) showing package use across notebooks.
 
 Check links (note: links included as "free text" are currently ignored):
 

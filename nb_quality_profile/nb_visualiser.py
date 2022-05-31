@@ -245,30 +245,79 @@ def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=Tru
         return response
 
 def nb_imports_parse_nb(path='.', text_formats=True,
-                        raw='', installed=True):
+                        raw='', installed=True, verbose=True):
     """Do a big parse and then print the result."""
+    from isort import place_module
+    import pkg_resources
+
+    # Returns: STDLIB, THIRDPARTY
+    # For python 3.10, we could use: sys.stdlib_module_names
 
     reports = nb_big_parse_nb(path, text_formats, raw=raw)
     imports = reports["imports"]
     all_packages = []
+    third_party = []
+    std_lib = []
+
+    x = []
+    y = []
     for i in imports:
         packages = [p.split('.')[0] for p in imports[i]]
         all_packages = all_packages + packages
-        print(f"Imports in {i}: {', '.join(packages)}")
+    
+        if verbose:
+            print(f"Imports in {i}: {', '.join(packages)}")
+    
+        # Scatterplot
+        for p in imports[i]:
+            #x.append("\n".join(str(i).split("/")))
+            # Limit length of filename displayed
+            x.append(str(i).split("/")[-1].replace(".ipynb", "")[:40])
+            y.append(p)
+
+    fig, ax = plt.subplots(figsize=(20, 10))
+    ax.scatter(x = x, y = y)
+    plt.xticks(rotation=30, ha='right')
+    # Accommodate long filenames
+    plt.subplots_adjust(bottom=0.2)
+    plt.title('Packages used across notebooks')
+    plt.savefig('packages.png')
+
     all_packages = set(all_packages)
-    print(f"All imports: {', '.join(all_packages)}")
+
+    # stdlib packages
+    std_lib = {p for p in all_packages if place_module(p) == "STDLIB"}
+    #Project names are defined by a project’s setup script, 
+    #and they are used to identify projects on PyPI. 
+    third_party = {p for p in all_packages if place_module(p) == "THIRDPARTY"}
+    third_party_packages_required = {pkg_resources.Requirement(p).project_name for p in all_packages if place_module(p) == "THIRDPARTY"}
+    if verbose:
+        print(f"All imports: {', '.join(all_packages)}")
+        print(f"std_lib imports: {', '.join(std_lib)}")
+        print(f"Third party imports: {', '.join(third_party)}")
+        print(f"Third party projects required: {', '.join(third_party_packages_required)}")
+    fails = None
     if installed:
         import importlib
+
         fails = [p for p in all_packages if not importlib.util.find_spec(p)]
-        if fails:
-            print(f"The following packages cannot be imported: {''.join(fails)}")
-        else:
-            print("All packages can be imported.")
+        fails_required = {pkg_resources.Requirement(p).project_name for p in fails}
+        if verbose:
+            if fails:
+                print(f"The following packages cannot be imported: {', '.join(fails)}")
+                print(f"Install the following packages to fix broken imports: {', '.join(fails_required)}")
+            else:
+                print("All packages can be imported.")
+
+    return (imports, all_packages, std_lib, third_party, fails)
 
     # For package details:
     #import pkg_resources
+    # https://setuptools.pypa.io/en/latest/pkg_resources.html
     #print([p.project_name for p in pkg_resources.working_set])
     # We can also pull out things like package requirements, etc.
+    # pkg_resources.working_set.require('pandas')
+    # pkg_resources.Requirement('pandas').project_name
 
 
 def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False, raw=''):
