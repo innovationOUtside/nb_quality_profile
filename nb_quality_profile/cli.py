@@ -86,14 +86,15 @@ def alt_tags(path, grab_images, report):
 			for i in nb["images"]:
 				biglist.append([nb["notebook"], i[1], src, dest,
 				 f'![{i[1]}]({dest})'])
-			report_fn = "nb_images_report.md"
+			report_fn = "nb_images_report.html"
 
 	if report:
 		from tabulate import tabulate
 		with open(report_fn, 'w') as f:
 			f.write(tabulate(biglist,
 					headers=["notebook", "path", "src", "dest", "img" ],
-					tablefmt='github'))
+					tablefmt='html'))
+		click.echo(f"\nReport saved to: {report_fn}")
 
 	if missing_alt_text:
 		click.echo('\nMissing alt text:')
