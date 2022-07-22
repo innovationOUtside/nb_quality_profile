@@ -660,7 +660,7 @@ from nbformat.notebooknode import NotebookNode
 def make_html_tree(md):
     """Generate etree HTML structure from markdown text."""
     try:
-        html_tree = etree.fromstring(f"<div>{markdown.markdown(md)}</div>")
+        html_tree = etree.HTML(f"<div>{markdown.markdown(md)}</div>")
     except:
         #print(f"<div>{markdown.markdown(md)}</div>")
         print(f"Error parsing markdown...")

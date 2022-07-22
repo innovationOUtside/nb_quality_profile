@@ -88,6 +88,13 @@ Options:
   --help              Show this message and exit.
 ```
 
+To grab screenshots, `playwright` needs to be installed:
+
+```
+pip install playwright
+playwright install
+```
+
 Check image alt text:
 
 ```
