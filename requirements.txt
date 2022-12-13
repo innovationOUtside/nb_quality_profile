@@ -16,3 +16,5 @@ readtime
 list-imports
 pytest-codeblocks
 radon
+
+isort
