@@ -124,7 +124,8 @@ LINE_WIDTH = 160
 import nbformat
 import os
 import textwrap
-    
+from glob import glob
+
 def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
     """Parse one or more notebooks on a path."""
     
@@ -196,13 +197,14 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         nb_multidir_cell_map = {}
         nb_multidir_imports = {}
         nb_multidir_text_report = {}
-        path = Path(path)
-        if not path.is_dir():
-            return
-        for fn in sorted(path.rglob("*.ipynb")):
-            #Start walking...
-            if not set(exclude_paths).intersection(set(fn.parts)):
-                #Profile that directory...
+
+        paths = [Path(p) for p in glob(path)]
+        paths = sorted([p for p in paths if p.is_dir()])
+        for path in paths:
+            for fn in sorted(path.rglob("*.ipynb")):
+                #Start walking...
+                if not set(exclude_paths).intersection(set(fn.parts)):
+                    #Profile that directory...
                     reports = _nb_big_parse_nb(fn, text_formats, **kwargs )
                     cell_map = reports['cell_map']
                     imports = reports['imports']
