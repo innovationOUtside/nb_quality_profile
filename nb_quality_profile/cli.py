@@ -8,8 +8,12 @@ import urllib
 def cli():
 	pass
 
+# In the click path arguments, setting: type=click.Path(exists=True)
+# fails if ther is a glob * in the provided path. Ideally, we would
+# be able to check for whether any path exists on the supplied path
+
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--out', '-o', default='nb_quality_review.png',  help='Image outfile')
 @click.option('--gap', '-g', default=0, type=float, help='Gap')
 @click.option('--gapcolor', '-G', default='lightgrey', help='Gap colour')
@@ -26,7 +30,7 @@ def chart(path, out, gap, gapcolor, linewidth, text_formats):
 
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--text-formats/--no-text-formats', default=True, help="Enable/disable Jupytext support.")
 def imports(path, text_formats):
 	"""Display notebook imports from provided file or directory path."""
@@ -34,7 +38,7 @@ def imports(path, text_formats):
 	nb_imports_parse_nb(path, text_formats)
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--text-formats/--no-text-formats', default=True,
 			   help="Enable/disable Jupytext support.")
 @click.option('--reading-rate', '-r', default=100, type=int, help='Words per minute.')
@@ -45,7 +49,7 @@ def text_analysis(path, text_formats, reading_rate, rounded_minutes):
 	nb_text_parse_nb(path, text_formats, reading_rate, rounded_minutes)
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--grab-images', is_flag=True, help="Grab images.")
 @click.option('--report', is_flag=True, help="Save image report.")
 def alt_tags(path, grab_images, report):
@@ -104,7 +108,7 @@ def alt_tags(path, grab_images, report):
 		click.echo('\nAll images have alt text.')
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--all-links', is_flag=True, help="Display all links.")
 @click.option('--grab-screenshots', is_flag=True, help="Grab screenshots.")
 def link_check(path, all_links, grab_screenshots):
@@ -187,7 +191,7 @@ def link_check(path, all_links, grab_screenshots):
 			click.echo(f"\nScreenshots saved to {img_path}")
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('path')
 @click.option('--out', '-o', default="warnings_report.html",  help='Report outfile')
 def check_warnings(path, out):
 	"""Check code output cells for warnings."""
