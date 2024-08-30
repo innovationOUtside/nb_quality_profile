@@ -6,7 +6,7 @@ from setuptools import setup
 setup(
     name="nb_quality_profile",
     packages=["nb_quality_profile"],
-    version="0.3.0",
+    version="0.3.1",
     author="Tony Hirst",
     author_email="tony.hirst@gmail.com",
     description="Tools for profiling Jupyter notebook quality and visualing notebook structure.",
@@ -24,7 +24,7 @@ setup(
         "pandas==2.2.1",
         "matplotlib==3.7.5","numpy<2",
         "spacy==3.7.5",
-        "scikit-learn==1.4.0",
+        "scikit-learn==1.3.2", "scipy==1.11.4",
         "readtime",
         "list-imports",
         "pytest-codeblocks",

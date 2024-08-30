@@ -14,6 +14,8 @@
 
 # # Simple Notebook Visualiser
 #
+# __USE `active_ipynb` tag for cells viewed in Jupytext notebook that are not meant for py file__
+#
 # Simple notebook visualiser for one or more Jupyter notebooks.
 #
 # Visualises markdown and code cells, with block size determined by code cell line count and estimated screen line count for markdown cells.
@@ -27,6 +29,8 @@ import base64
 import jupytext
 from .text_quality import md_readtime
 from pathlib import Path
+from .notebook_profiler import process_notebook_file
+from pandas import concat, DataFrame
 
 def nb_vis(cell_map, img_file='', linewidth = 5, w=20, gap=None,
            gap_boost=1, gap_colour='lightgrey', retval='',
@@ -140,7 +144,7 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         n_screen_lines = len(_ll)
         return n_screen_lines
 
-    def _nb_big_parse_nb(fn='.', text_formats=True, raw='', **kwargs):
+    def _nb_big_parse_nb(fn=None, text_formats=True, raw='', **kwargs):
         """Parse a notebook and generate the nb_vis cell map for it."""
 
         cell_map = []
@@ -186,7 +190,9 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         if 'rounded_minutes' in kwargs and kwargs['rounded_minutes']:
             if 'reading_time' in text_report:
                 text_report['reading_time'] =  math.ceil(text_report['reading_time']/60)
-        return { 'cell_map':cell_map, 'imports':list(set(imports)), 'text_report':text_report }
+        big_report = process_notebook_file(fn)
+        return { 'cell_map':cell_map, 'imports':list(set(imports)),
+                 'text_report':text_report, "big_report":big_report }
 
     def _dir_walker(path='.', exclude = 'default', text_formats=True):
         """Profile all the notebooks in a specific directory, list of directories, or individual files."""
@@ -201,6 +207,8 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         nb_multidir_cell_map = {}
         nb_multidir_imports = {}
         nb_multidir_text_report = {}
+        nb_multidir_big_report = {}
+        very_big_report_df = DataFrame()
 
         # Ensure path is a list to handle single paths and lists uniformly
         if isinstance(path, str):
@@ -232,15 +240,31 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
                 cell_map = reports['cell_map']
                 imports = reports['imports']
                 text_report = reports['text_report']
+                big_report_df = reports["big_report"]
+                big_report=big_report_df.to_dict('records')
+                big_report_df["path"] = str(Path(fn).parent)
+                big_report_df["name"] = Path(fn).name
                 if cell_map:
                     nb_multidir_cell_map = {**nb_multidir_cell_map, fn: cell_map}
                 if imports:
                     nb_multidir_imports = {**nb_multidir_imports, fn: imports}
                 if text_report:
                     nb_multidir_text_report = {**nb_multidir_text_report, fn: text_report}
-        return {"cell_map": nb_multidir_cell_map,
-                "imports": nb_multidir_imports,
-                "text_report": nb_multidir_text_report}
+                if big_report:
+                    nb_multidir_big_report = {**nb_multidir_big_report,  fn: big_report}
+                if not big_report_df.empty:
+                    very_big_report_df = concat(
+                        [very_big_report_df, big_report_df],
+                        ignore_index=True,
+                        sort=False,
+                    )
+        return {
+            "cell_map": nb_multidir_cell_map,
+            "imports": nb_multidir_imports,
+            "text_report": nb_multidir_text_report,
+            "big_report": nb_multidir_big_report,
+            "big_report_df": very_big_report_df,
+        }
 
     # Also: we need to be able to switch on and off which reports are run
     # Need to think about handling this properly e.g. in context of plugins
@@ -249,15 +273,21 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
         cell_map = reports['cell_map']
         imports = reports['imports']
         text_report = reports['text_report']
+        big_report = reports["big_report"]
+        big_report_df = reports["big_report_df"]
     else:
         reports =  _nb_big_parse_nb(path, text_formats, raw=raw, **kwargs)
 
         cell_map = {path: reports['cell_map']}
         imports = {path: reports['imports']}
         text_report = {path: reports['text_report']}
+        big_report = reports["big_report"]
+        big_report_df = reports["big_report_df"]
     return {"cell_map": cell_map,
             "imports": imports,
-            "text_report": text_report}
+            "text_report": text_report,
+            "big_report": big_report,
+            "big_report_df": big_report_df}
 
 
 def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', raw='', **kwargs):
@@ -288,13 +318,13 @@ def nb_imports_parse_nb(path='.', text_formats=True,
     for i in imports:
         packages = [p.split('.')[0] for p in imports[i]]
         all_packages = all_packages + packages
-    
+
         if verbose:
             print(f"Imports in {i}: {', '.join(packages)}")
-    
+
         # Scatterplot
         for p in imports[i]:
-            #x.append("\n".join(str(i).split("/")))
+            # x.append("\n".join(str(i).split("/")))
             # Limit length of filename displayed
             x.append(str(i).split("/")[-1].replace(".ipynb", "")[:40])
             y.append(p)
@@ -311,8 +341,8 @@ def nb_imports_parse_nb(path='.', text_formats=True,
 
     # stdlib packages
     std_lib = {p for p in all_packages if place_module(p) == "STDLIB"}
-    #Project names are defined by a project’s setup script, 
-    #and they are used to identify projects on PyPI. 
+    # Project names are defined by a project’s setup script,
+    # and they are used to identify projects on PyPI.
     third_party = {p for p in all_packages if place_module(p) == "THIRDPARTY"}
     third_party_packages_required = {pkg_resources.Requirement(p).project_name for p in all_packages if place_module(p) == "THIRDPARTY"}
     if verbose:
@@ -324,32 +354,48 @@ def nb_imports_parse_nb(path='.', text_formats=True,
     if installed:
         import importlib
 
-        fails = [p for p in all_packages if not importlib.util.find_spec(p)]
+        fails = [p for p in all_packages if p and not importlib.util.find_spec(p)]
         # TO DO  - what was the following supposed to check?
         # maybe dependencies?
-        #fails_required = {pkg_resources.Requirement(p).project_name for p in fails}
+        # fails_required = {pkg_resources.Requirement(p).project_name for p in fails}
         if verbose:
             if fails:
                 print(f"The following packages cannot be imported: {', '.join(fails)}")
-                #print(f"Install the following packages to fix broken imports: {', '.join(fails_required)}")
+                # print(f"Install the following packages to fix broken imports: {', '.join(fails_required)}")
             else:
                 print("All packages can be imported.")
 
     return (imports, all_packages, std_lib, third_party, fails)
 
     # For package details:
-    #import pkg_resources
+    # import pkg_resources
     # https://setuptools.pypa.io/en/latest/pkg_resources.html
-    #print([p.project_name for p in pkg_resources.working_set])
+    # print([p.project_name for p in pkg_resources.working_set])
     # We can also pull out things like package requirements, etc.
     # pkg_resources.working_set.require('pandas')
     # pkg_resources.Requirement('pandas').project_name
 
+from .notebook_profiler import (
+    reporter,
+    report_template_dir,
+    report_template_nb,
+    multi_level_reporter,
+)
 
 def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False, raw=''):
     """Parse markdown text in notebook(s)."""
     reports = nb_big_parse_nb(path, text_formats, reading_rate=reading_rate, rounded_minutes=rounded_minutes, raw=raw)
-    print(reports['text_report'])
+    print("\nTEXT REPORT\n",reports['text_report'])
+    print("\n\nIMPORTS REPORT\n",reports["imports"])
+    #print("\n\BIG REPORT\n", reports["big_report"], "\n\n")
+
+    # print(reporter(reports["big_report_df"], report_template_full))
+    print(
+        multi_level_reporter(
+            reports["big_report_df"], report_template_dir, report_template_nb
+        )
+    )
+    # print(reports)
 
 
 # + tags=["active-ipynb"]

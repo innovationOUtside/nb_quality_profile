@@ -38,6 +38,8 @@
 #
 # There is a potential for making IPython magics for some of the reporting functions (for example, `radon` or `wily` reports) to provide live feedback / reporting during the creation of content in a notebook.
 #
+# *Code has been extract from this notebook into the `nb_quality_profile` package. If experiments are made updating code in this notebook, it will need mirroring in the actual package...*
+#
 # ### Notebooks
 #
 # In the first instance, reports are generated for code cell inputs and markdown cells; code outputs and raw cells are not considered. Code appearing in markdown cells is identified as code-like but not analysed in terms of code complexity etc.
@@ -60,7 +62,7 @@
 #
 
 # +
-#Last using numpy 1.x
+# Last using numpy 1.x
 # #%pip install --upgrade numpy<2 spacy==3.7.5 pandas==2.2.2 scikit-learn==1.4.0
 # -
 
@@ -568,8 +570,8 @@ def process_notebook_md_doc(doc):
 
 # Running the `process_notebook_md_doc()` function on a `doc` object returns a single row dataframe containing summary statistics calculated over the full markdown content of the notebook.
 
-#counts, readability = text_stats_summary(doc)
-#extras = process_extras(doc)
+# counts, readability = text_stats_summary(doc)
+# extras = process_extras(doc)
 
 # + tags=["active-ipynb"]
 # process_notebook_md_doc(full_doc)
@@ -736,7 +738,7 @@ def process_notebook_md(nb, fn=''):
     for i, cell in enumerate(nb.cells):
         if cell['cell_type']=='markdown':
             _metrics = process_notebook_md_doc( nlp( cell['source'] ))
-            _metrics['cell_count'] = i
+            _metrics['cell_index'] = i
             _metrics['cell_type'] = 'md'
             #cell_reports = cell_reports.append(_metrics, sort=False)
             cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
@@ -768,7 +770,7 @@ def process_notebook_file(fn):
     with open(fn,'r') as f:
         try:
             nb = nbformat.reads(f.read(), as_version=4)
-            cell_reports = process_notebook_md(nb, fn=fn)
+            cell_reports = process_notebook(nb, fn=fn)
         except:
             print(f'FAILED to process {fn}')
             cell_reports = pd.DataFrame()
@@ -1114,19 +1116,19 @@ def process_notebook_code_text(txt):
 def process_notebook(nb, fn=''):
     """Process all the markdown and code cells in a notebook."""
     cell_reports = pd.DataFrame()
-    
+
     for i, cell in enumerate(nb.cells):
         if cell['cell_type']=='markdown':
             _metrics = process_notebook_md_doc( nlp( cell['source'] ))
-            _metrics['cell_count'] = i
+            _metrics['cell_index'] = i
             _metrics['cell_type'] = 'md'
-            #cell_reports = cell_reports.append(_metrics, sort=False)
+            # cell_reports = cell_reports.append(_metrics, sort=False)
             cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
         elif cell['cell_type']=='code':
             _metrics = process_notebook_code_text(cell['source'] )
-            _metrics['cell_count'] = i
+            _metrics["cell_index"] = i
             _metrics['cell_type'] = 'code'
-            #cell_reports = cell_reports.append(_metrics, sort=False)
+            # cell_reports = cell_reports.append(_metrics, sort=False)
             cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
     cell_reports['filename'] = fn
     cell_reports.reset_index(drop=True, inplace=True)
@@ -1193,7 +1195,7 @@ def process_notebook(nb, fn=''):
 
 # Let's make a start on a complete report template...
 
-report_template_full = '''
+report_template_dir = '''
 In directory `{path}` there were {nb_count} notebooks.
 
 - total markdown wordcount {n_words} words across {n_md_cells} markdown cells
@@ -1204,34 +1206,90 @@ Estimated total reading time of {reading_time_mins} minutes.
 
 '''
 
+report_template_nb = """
+Report for {name}
+
+- total markdown wordcount {n_words} words across {n_md_cells} markdown cells
+- total code line count of {n_total_code_lines} lines of code across {n_code_cells} code cells
+  - {n_code_lines} code lines, {n_single_line_comment_code_lines} comment lines and {n_blank_code_lines} blank lines
+
+Estimated total reading time of {reading_time_mins} minutes.
+
+"""
 
 # Now let's add those extra requirements to the the feedstock generator:
+def notebook_report_feedstock(ddf, grouper=None):
+    """Create a feedstock dict for report generation. Keyed by directory path and optionally by name."""
+    if grouper is None:
+        grouper = ["path"]
 
-def notebook_report_feedstock(ddf):
-    """Create a feedstock dict for report generation. Keyed by directory path."""
-    ddf_dict = ddf.groupby(['path'])[['n_words', 'reading_time_mins', 'reading_time_s',
-                                     'n_code_lines', 'n_single_line_comment_code_lines',
-                                     'n_total_code_lines','n_blank_code_lines']].sum().to_dict(orient='index')
-    
-    notebook_counts_by_dir = ddf.groupby(['path'])['filename'].nunique().to_dict()
-    notebook_counts_by_dir = {k:{'nb_count':notebook_counts_by_dir[k]} for k in notebook_counts_by_dir}
-        
-    report_dict = always_merger.merge(ddf_dict, notebook_counts_by_dir )
-    
-    code_cell_counts = ddf[ddf['cell_type']=='code'].groupby(['path']).size().to_dict()
-    md_cell_counts = ddf[ddf['cell_type']=='md'].groupby(['path']).size().to_dict()
-    
+    ddf_dict = (
+        ddf.groupby(grouper)[
+            [
+                "n_words",
+                "reading_time_mins",
+                "reading_time_s",
+                "n_code_lines",
+                "n_single_line_comment_code_lines",
+                "n_total_code_lines",
+                "n_blank_code_lines",
+            ]
+        ]
+        .sum()
+        .to_dict(orient="index")
+    )
+
+    notebook_counts = ddf.groupby(grouper)["filename"].nunique().to_dict()
+    notebook_counts = {k: {"nb_count": notebook_counts[k]} for k in notebook_counts}
+
+    report_dict = always_merger.merge(ddf_dict, notebook_counts)
+
+    code_cell_counts = ddf[ddf["cell_type"] == "code"].groupby(grouper).size().to_dict()
+    md_cell_counts = ddf[ddf["cell_type"] == "md"].groupby(grouper).size().to_dict()
+
     for k in report_dict:
-        report_dict[k]['path'] = k
-        report_dict[k]['n_code_cells'] = code_cell_counts[k] if k in code_cell_counts else 'NA'
-        report_dict[k]['n_md_cells'] = md_cell_counts[k] if  k in md_cell_counts else 'NA'
-    
+        report_dict[k]["path"] = k[0] if isinstance(k, tuple) else k
+        if isinstance(k, tuple) and len(k) > 1:
+            report_dict[k]["name"] = k[1]
+        report_dict[k]["n_code_cells"] = (
+            code_cell_counts[k] if k in code_cell_counts else "NA"
+        )
+        report_dict[k]["n_md_cells"] = (
+            md_cell_counts[k] if k in md_cell_counts else "NA"
+        )
+
     return report_dict
+
+from collections import defaultdict
+
+def multi_level_reporter(df, dir_template, item_template, path_filter=""):
+    """Generate a multi-level report with directory and item level information."""
+    dir_feedstock = notebook_report_feedstock(df, grouper=["path"])
+    item_feedstock = notebook_report_feedstock(df, grouper=["path", "name"])
+
+    report_txt = ""
+    item_reports = defaultdict(str)
+
+    # Generate item-level reports
+    for item in item_feedstock:
+        if path_filter in item[0]:  # item[0] is the path
+            item_report = item_template.format(**item_feedstock[item])
+            item_reports[item[0]] += "\n" + item_report
+
+    # Generate directory-level reports with nested item reports
+    for directory in dir_feedstock:
+        if path_filter in directory:
+            dir_report = dir_template.format(**dir_feedstock[directory])
+            report_txt += "\n\n" + dir_report
+            if directory in item_reports:
+                report_txt += "\n" + item_reports[directory]
+
+    return report_txt
 
 
 # Create a wrapper function for generating the report text:
 
-def reporter(df, template, path_filter=''):
+def reporter(df, template, path_filter='', nb_report=True):
     feedstock = notebook_report_feedstock(df)
     report_txt=''
     for d in feedstock:
@@ -1484,5 +1542,3 @@ def cell_attribs(cells, colour='cell_type', size='n_screen_lines'):
 # Also a count of empty cells?
 #
 # Is this moving towards some sort of notebook linter?
-
-
