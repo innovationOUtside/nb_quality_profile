@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.13.8
+#       jupytext_version: 1.16.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -34,7 +34,7 @@
 # - packages / modules loaded in to the notebook;
 # - unused code items in a notebook (for example, modules loaded but not used).
 #
-# Currently, code profiling is only applied to code that appears in code cells, not code that is quoted or described in markdown cells. 
+# Currently, code profiling is only applied to code that appears in code cells, not code that is quoted or described in markdown cells.
 #
 # There is a potential for making IPython magics for some of the reporting functions (for example, `radon` or `wily` reports) to provide live feedback / reporting during the creation of content in a notebook.
 #
@@ -42,7 +42,7 @@
 #
 # In the first instance, reports are generated for code cell inputs and markdown cells; code outputs and raw cells are not considered. Code appearing in markdown cells is identified as code-like but not analysed in terms of code complexity etc.
 #
-# For each markdown cell, we can generate a wide range of simple text document statistics. Several packages exist to support such analyses (for example, [`textstat`](https://github.com/shivam5992/textstat), [`readability`](https://github.com/andreasvc/readability/)) but the focus in this notebook will be on metrics derived using the [`spacy`](https://spacy.io/) underpinned [`textacy`](https://github.com/chartbeat-labs/textacy) package for things like [readability](https://chartbeat-labs.github.io/textacy/api_reference/misc.html?highlight=readability#text-statistics) metrics. Several simple custom metrics are also suggested.
+# For each markdown cell, we can generate a wide range of simple text document statistics. Several packages exist to support such analyses (for example, [`textstat`](https://github.com/shivam5992/textstat), [`readability`](https://github.com/andreasvc/readability/)) but the focus in this notebook will be on metrics derived using the [`spacy`](https://spacy.io/) underpinned by the local `text_stats.py` package for things like readability metrics. Several simple custom metrics are also suggested.
 #
 # For code in code cells, the [`radon`](https://radon.readthedocs.io) package is used to generate code metrics, with additional packages providing further simple metrics.
 #
@@ -54,10 +54,15 @@
 #
 # We might also explore the extent to which interactive notebook profiling tools, such as magics or notebook extensions, be used to support the authoring of new instructional notebooks.
 #
-# We might also ask to what extent might interactive notebook profiling tools be used to support learners working through instructional material and reflecting on their work? Code health metrics, such as [cell execution success](https://nbgallery.github.io/health_paper.html) used by *nbgallery* may provide clues regarding which code activity cells students struggled to get working, for example. By looking at statistics across students (for example, in assessment notebooks with cell execution success log monitoring enabled) we may be able to identify "healthy" or "unhealthy" activities; for example, a healthy activity is one in which students can get their code to run with one or two tries, an unhealthy activity is one where they make repeated attempts at trying to get the code to work as they desire. 
+# We might also ask to what extent might interactive notebook profiling tools be used to support learners working through instructional material and reflecting on their work? Code health metrics, such as [cell execution success](https://nbgallery.github.io/health_paper.html) used by *nbgallery* may provide clues regarding which code activity cells students struggled to get working, for example. By looking at statistics across students (for example, in assessment notebooks with cell execution success log monitoring enabled) we may be able to identify "healthy" or "unhealthy" activities; for example, a healthy activity is one in which students can get their code to run with one or two tries, an unhealthy activity is one where they make repeated attempts at trying to get the code to work as they desire.
 #
 # The notebook profiler should also be runnable against notebooks created using Jupytext from markdown rendered from OU-XML. It would probably make *more* sense to build a custom OU-XML profiler, eg one that could perhaps draw on a summary XML doc generated from OU-XML source docs using XSLT. I'll try to bear in mind creating reporting functions that might be useable in this wider sense. (OU-XML will also have thngs like a/v components, and may have explicit time guidance on expected time spent on particular activities.)
 #
+
+# +
+#Last using numpy 1.x
+# #%pip install --upgrade numpy<2 spacy==3.7.5 pandas==2.2.2 scikit-learn==1.4.0
+# -
 
 # ## Settings
 #
@@ -88,7 +93,7 @@ CELL_SKIP_TIME = 1 # nomimal time in seconds to move from one cell to the next
 import nbformat
 
 # + tags=["active-ipynb"]
-# TEST_NOTEBOOK = 'Notebook_profile_test.ipynb'
+# TEST_NOTEBOOK = '../Notebook_profile_test.ipynb'
 # with open(TEST_NOTEBOOK,'r') as f:
 #     nb = nbformat.reads(f.read(), as_version=4)
 # -
@@ -119,7 +124,7 @@ import nbformat
 # *It might be worth looking at forking this reading time estimator and try to factor in reading time elements that reflect the presence of code? Or maybe use a slower reading rate for code? Or factor in code complexity? The presence of links might also affect reading time.*
 
 # +
-#https://github.com/alanhamlett/readtime
+# https://github.com/alanhamlett/readtime
 # #%pip install readtime
 
 import readtime
@@ -135,10 +140,13 @@ import math
 # The `spacy` natural language processing package provides a wide ranging of basic tools for parsing texts.
 
 # +
+# #%pip install --upgrade spacy pandas scikit-lean
+
+# +
 # #%pip install spacy
 import spacy
 
-#Check we have the small English model at least
+# Check we have the small English model at least
 SPACY_LANG_MODEL = 'en_core_web_sm'
 
 try:
@@ -147,7 +155,7 @@ except:
     import spacy.cli
     spacy.cli.download(SPACY_LANG_MODEL)
 
-#Load a model that a text is parsed against
+# Load a model that a text is parsed against
 nlp = spacy.load(SPACY_LANG_MODEL)
 # -
 
@@ -156,19 +164,13 @@ nlp = spacy.load(SPACY_LANG_MODEL)
 # + run_control={"marked": false} tags=["active-ipynb"]
 # doc = nlp(txt)
 # -
-
-# The `textacy` package builds on `spacy` to provide a range of higher level tools and statistics, from simple statistics such as word and sentence counts to more complex readability scores using a variety of [readability measures](https://readable.com/blog/the-flesch-reading-ease-and-flesch-kincaid-grade-level/).
-#
 # One way of using readability measures would be to set reading rates dynamically for each markdown cell based on calculated readability scores.
 
-# #%pip install textacy
-from textacy.text_stats.api import TextStats
-from textacy import text_stats
+from .text_stats import text_stats_summary
 
-
-# The following statistics are providied by `text_stats`.
+# The following statistics are providied by `text_stats_summary`.
 #
-# Basic counts (mirrored from (`text_stats.basics`):
+# Basic counts:
 #
 # - `n_chars`
 # - `n_chars_per_word`
@@ -180,59 +182,21 @@ from textacy import text_stats
 # - `n_syllables_per_word`
 # - `n_unique_words`
 # - `n_words`
+# - `sentence_lengths`
+# - `sentence_length_mean`
+# - `sentence_length_median`
+# - `sentence_length_stdev`
 #
 #
 #
-# Readability (mirrored from `text_stats.readability`):
+# Readability:
 #
 # - `automated_readability_index`
-# - `automatic_arabic_readability_index`
 # - `coleman_liau_index`
 # - `flesch_kincaid_grade_level`
 # - `flesch_reading_ease`
-# - `gulpease_index`
 # - `gunning_fog_index`
-# - `lix`
-# - `mu_legibility_index`
-# - `perspicuity_index`
 # - `smog_index`
-# - `wiener_sachtextformel`
-
-# + tags=["active-ipynb"]
-# text_stats.automated_readability_index(doc)
-# -
-
-def text_stats_summary(doc):
-    """Generate summary stats report."""
-    counts = {
-        "n_chars": text_stats.n_chars(doc),
-        #"n_chars_per_word": text_stats.n_chars_per_word(doc),
-        "n_long_words": text_stats.n_long_words(doc),
-        "n_monosyllable_words": text_stats.n_monosyllable_words(doc),
-        "n_polysyllable_words": text_stats.n_polysyllable_words(doc),
-        "n_sents": text_stats.n_sents(doc),
-        "n_syllables": text_stats.n_syllables(doc),
-        #"n_syllables_per_word": text_stats.n_syllables_per_word(doc),
-        "n_unique_words": text_stats.n_unique_words(doc),
-        "n_words": text_stats.n_words(doc)
-    }
-    
-    readability = {
-        "automated_readability_index": text_stats.automated_readability_index(doc),
-        "automatic_arabic_readability_index": text_stats.automatic_arabic_readability_index(doc),
-        "coleman_liau_index": text_stats.coleman_liau_index(doc),
-        "flesch_kincaid_grade_level": text_stats.flesch_kincaid_grade_level(doc),
-        "flesch_reading_ease": text_stats.flesch_reading_ease(doc),
-        "gulpease_index": text_stats.gulpease_index(doc),
-        "gunning_fog_index": text_stats.gunning_fog_index(doc),
-        "lix": text_stats.lix(doc),
-        "mu_legibility_index": text_stats.mu_legibility_index(doc) if counts["n_words"] > 2 else None,
-        "perspicuity_index": text_stats.perspicuity_index(doc),
-        "smog_index": text_stats.smog_index(doc),
-        "wiener_sachtextformel": text_stats.wiener_sachtextformel(doc)
-    } if counts["n_words"] else {}
-    
-    return counts, readability
 
 
 # + tags=["active-ipynb"]
@@ -240,19 +204,20 @@ def text_stats_summary(doc):
 # counts, readability
 # -
 
-# The `textacy` package can also pull out notable features in a text, such as key terms or acronyms, both of which may be useful as part of a notebook summary.
+# Also pull out notable features in a text, such as acronyms and key terms, which may be useful as part of a notebook summary.
 
-#Extract keyterms
-from textacy import extract
-
-# + tags=["active-ipynb"]
-# extract.keyterms.textrank(doc, normalize="lemma", topn=10)
-# -
-
-from textacy.extract import acronyms_and_definitions
+# Extract acronyms and keyterms
+from .text_stats import extract_acronyms, extract_keyterms
 
 # + tags=["active-ipynb"]
-# acronyms_and_definitions(doc)
+# extract_acronyms(doc)
+
+# + tags=["active-ipynb"]
+# try:
+#     extract_keyterms(doc)
+# except Exception as e:
+#     #raise(e)
+#     display(e)
 # -
 
 # As well as using measures provided by off-the-shelf packages, it's also useful to define some simple metrics of our own that don't appear in other packages.
@@ -276,39 +241,6 @@ def _count_screen_lines(txt, width=LINE_WIDTH):
 # + tags=["active-ipynb"]
 # screen_txt='As well as "text", markdown cells may contain cell blocks. The following is a basic report generator for summarising key statistical properties of code blocks. (We will see later an alternative way of calculating such metrics for well form Python code at least.)'
 # _count_screen_lines(screen_txt)
-# -
-
-# The `textacy` package does not appear to provide average sentence length statistics (although sentence length metrics may play a role in calculating readability scores? So maybe there are usable functions somewhere in there?) but we can straightforwardly define our own.
-
-# +
-import statistics
-
-def sentence_lengths(doc):
-    """Generate elementary sentence length statistics."""
-    s_mean = None
-    s_median = None
-    s_stdev = None
-    s_lengths = []
-    for sentence in doc.sents:
-        #Punctuation elements are tokens in their own right; remove these from sentence length counts
-        s_lengths.append(len( [tok.text for tok in sentence if tok.pos_ != "PUNCT"]))
-        
-    if s_lengths:
-        #If we have at least one measure, we can generate some simple statistics
-        s_mean = statistics.mean(s_lengths)
-        s_median = statistics.median(s_lengths)
-        s_stdev = statistics.stdev(s_lengths) if len(s_lengths) > 1 else 0
-        
-    return s_lengths, s_mean, s_median, s_stdev
-
-
-# -
-
-# The sentence statistics are generated from a `spacy` `doc` object and returned as separate statistics.
-
-# + tags=["active-ipynb"]
-# s_lengths, s_mean, s_median, s_stdev = sentence_lengths(doc)
-# print(s_lengths, s_mean, s_median, s_stdev)
 # -
 
 # As well as "text", markdown cells may contain cell blocks. The following is a basic report generator for summarising key statistical propererties of code blocks. (We will see later an alternative way of calculating such metrics for well form Python code at least.)
@@ -417,7 +349,7 @@ def _report_md_features(txt):
 
 # +
 # Deprecated in favour of pytest-codeblocks
-#import excode
+# import excode
 
 import io
 from pytest_codeblocks import extract_from_buffer
@@ -466,7 +398,7 @@ def code_block_report(c):
 # for c in extract_from_buffer(io.StringIO(mc)):
 #     (n_total_code_lines, n_blank_code_lines, \
 #          n_single_line_comment_code_lines, n_code_lines) = code_block_report(c)
-#     
+#
 #     print(n_total_code_lines, n_blank_code_lines, \
 #           n_single_line_comment_code_lines, n_code_lines )
 # -
@@ -477,7 +409,7 @@ def code_block_report(c):
 #
 # The `radon` parser will also report an error if it comes across IPython line or cell magic code, or `!` prefixed shell commands.
 #
-# We will see later how we can start to cleanse a code string of IPython `!` and `%` prefixed directives when we consider parsing code cells. 
+# We will see later how we can start to cleanse a code string of IPython `!` and `%` prefixed directives when we consider parsing code cells.
 
 # #%pip install radon
 from radon.raw import analyze
@@ -511,7 +443,7 @@ def r_analyze(c):
 # for c in extract_from_buffer(io.StringIO(mc)):
 #     (n_total_code_lines, n_blank_code_lines, \
 #          n_single_line_comment_code_lines, n_code_lines) = r_analyze(c)
-#     
+#
 #     print(n_total_code_lines, n_blank_code_lines, \
 #           n_single_line_comment_code_lines, n_code_lines)
 # -
@@ -543,39 +475,32 @@ import math
 
 def process_extras(doc):
     """Generate a dict containing additional metrics."""
-    
+
     n_headers, n_paras, n_screen_lines, n_code_blocks, n_code = _report_md_features(doc.text)
-    s_lengths, s_mean, s_median, s_stdev = sentence_lengths(doc)
     (n_total_code_lines, n_code_lines, n_blank_code_lines, n_single_line_comment_code_lines) = n_code
-    
+
     _reading_time = readtime.of_markdown(doc.text, wpm=READING_RATE).delta.total_seconds()
-    #Add reading time overhead for code
+    # Add reading time overhead for code
     line_of_code_overhead = 1 #time in seconds to add to reading of each code line
     _reading_time = _reading_time + code_reading_time(n_code_lines, n_single_line_comment_code_lines,
                                                      line_of_code_overhead)
-    
-    extras = {'n_headers':n_headers,
-              'n_paras':n_paras,
-              'n_screen_lines':n_screen_lines,
-              's_lengths':s_lengths,
-              's_mean':s_mean,
-              's_median':s_median,
-              's_stdev':s_stdev,
-              'n_code_blocks':n_code_blocks,
-              'n_total_code_lines':n_total_code_lines,
-              'n_code_lines':n_code_lines,
-              'n_blank_code_lines':n_blank_code_lines,
-              'n_single_line_comment_code_lines':n_single_line_comment_code_lines,
-              'reading_time_s':_reading_time,
-              'reading_time_mins': math.ceil(_reading_time/60),
-              'mean_sentence_length': s_mean,
-              'median_sentence_length': s_median,
-              'stdev_sentence_length': s_stdev,
-              #The following are both listy, so we need to handle them when we move to a dataframe
-              # TO DO  - paramterise the number of key terms
-              'keyterms':extract.keyterms.textrank(doc, normalize="lemma", topn=10),
-              'acronyms':acronyms_and_definitions(doc)
-             }
+
+    extras = {
+        "n_headers": n_headers,
+        "n_paras": n_paras,
+        "n_screen_lines": n_screen_lines,
+        "n_code_blocks": n_code_blocks,
+        "n_total_code_lines": n_total_code_lines,
+        "n_code_lines": n_code_lines,
+        "n_blank_code_lines": n_blank_code_lines,
+        "n_single_line_comment_code_lines": n_single_line_comment_code_lines,
+        "reading_time_s": _reading_time,
+        "reading_time_mins": math.ceil(_reading_time / 60),
+        # The following are both listy, so we need to handle them when we move to a dataframe
+        # TO DO  - sklearn numpy issue?
+        "acronyms": extract_acronyms(doc),
+        "keyterms": {}# extract_keyterms(doc, n=10),
+    }
     return extras
 
 
@@ -591,7 +516,7 @@ def process_extras(doc):
 # ### Generate a Whole Notebook Markdown Report
 #
 # The whole notebook report can come in various flavours:
-#     
+#
 # - top level summary statistics that merge all the markdown content into a single cell and then analyse that;
 # - aggregated cell level statistics that summarise the statistics calculated for each markdown cell separately;
 # - individual cell level statistics that report the statistics for each cell separately.
@@ -642,6 +567,9 @@ def process_notebook_md_doc(doc):
 # -
 
 # Running the `process_notebook_md_doc()` function on a `doc` object returns a single row dataframe containing summary statistics calculated over the full markdown content of the notebook.
+
+#counts, readability = text_stats_summary(doc)
+#extras = process_extras(doc)
 
 # + tags=["active-ipynb"]
 # process_notebook_md_doc(full_doc)
@@ -780,7 +708,7 @@ def get_warnings(nb):
 
 # + tags=["active-ipynb"]
 # nb_md_links_and_images(TEST_NOTEBOOK)
-# TEST_DIR = '../tm351-undercertainty/notebooks/tm351/Part 02 Notebooks'
+# TEST_DIR = '../../tm351/Part 02 Notebooks'
 # test_links_images = nb_md_links_and_images(TEST_DIR)
 # test_links_images
 # -
@@ -810,8 +738,8 @@ def process_notebook_md(nb, fn=''):
             _metrics = process_notebook_md_doc( nlp( cell['source'] ))
             _metrics['cell_count'] = i
             _metrics['cell_type'] = 'md'
-            cell_reports = cell_reports.append(_metrics, sort=False)
-    
+            #cell_reports = cell_reports.append(_metrics, sort=False)
+            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
     cell_reports['filename'] = fn
     cell_reports.reset_index(drop=True, inplace=True)
     return cell_reports
@@ -874,18 +802,19 @@ def _nb_dir_file_profiler(path, _f, report=False):
             print(f'Profiling {f}')
         return process_notebook_file(f)
     return pd.DataFrame()
-    
+
 def nb_dir_profiler(path):
     """Profile all the notebooks in a specific directory."""
     nb_dir_report = pd.DataFrame()
     for _f in os.listdir(path):
-        nb_dir_report = nb_dir_report.append( _nb_dir_profiler(path, _f), sort=False )
+        #nb_dir_report = nb_dir_report.append( _nb_dir_profiler(path, _f), sort=False )
+        nb_dir_report = pd.concat([nb_dir_report, _nb_dir_profiler(path, _f)], ignore_index=True, sort=False)
     #nb_dir_report['path'] = path
     return nb_dir_report   
 
 
 # +
-#nb_dir_profiler('.')
+# nb_dir_profiler('.')
 # -
 
 # ### Analysing Notebooks Across Multiple Directories
@@ -908,14 +837,16 @@ def nb_multidir_profiler(path, exclude = 'default'):
             #Profile that directory...
             nb_dir_report = pd.DataFrame()
             for _f in files:
-                nb_dir_report = nb_dir_report.append( _nb_dir_file_profiler(_path, _f), sort=False )
+                #nb_dir_report = nb_dir_report.append( _nb_dir_file_profiler(_path, _f), sort=False )
+                nb_dir_report = pd.concat([nb_dir_report, _nb_dir_file_profiler(_path, _f)], ignore_index=True, sort=False)
             if not nb_dir_report.empty:
                 nb_dir_report['path'] = _path
-                nb_multidir_report = nb_multidir_report.append(nb_dir_report, sort=False)
+                #nb_multidir_report = nb_multidir_report.append(nb_dir_report, sort=False)
+                nb_multidir_report = pd.concat([nb_multidir_report, nb_dir_report], ignore_index=True, sort=False)
+    if not nb_multidir_report.empty:
+        nb_multidir_report = nb_multidir_report.sort_values(by=['path', 'filename'])
     
-    nb_multidir_report = nb_multidir_report.sort_values(by=['path', 'filename'])
-    
-    nb_multidir_report.reset_index(drop=True, inplace=True)
+        nb_multidir_report.reset_index(drop=True, inplace=True)
     
     return nb_multidir_report   
 
@@ -1006,43 +937,6 @@ def notebook_report_feedstock_md_test(ddf):
 # notebook_report_feedstock_md_test(ddf)
 # -
 
-# ### Additional Reporting Levels
-# For additional reports, we could start to look for particular grammatical constructions in the markdown text.
-
-# When it comes to looking for particular grammatical constructions in the text, the `textacy` package allows us to define patterns of interest in various ways. Are there any particular constructions that we may want to look out for in an instructional text?
-
-import textacy
-
-# + tags=["active-ipynb"]
-# extract.keyterms.textrank(doc, normalize="lemma", topn=10)
-
-# +
-# extract.to_bag_of_terms?
-
-# + tags=["active-ipynb"]
-# for i in extract.to_bag_of_terms(doc, ents=True,
-#                                  ngs=True, ncs=True):
-#     print(i)
-
-# + tags=["active-ipynb"]
-# #But how do you define the pattern to extract the largest phrase over a sequence of tokens?
-# verb_phrase = r'(<VERB>?<ADV>*<VERB>+)' #extract.pos_regex_matches DEPRECATED
-#
-# verb_phrase2 = [{"POS": "VERB", "OP":"?"}, {"POS": "ADV", "OP": "*"},
-#                 {"POS": "VERB", "OP":"+"}] #extract.matches
-#
-# verb_phrase3 = r'POS:BERB:? POS:ADV:* POS:VERB:+' #extract.matches
-#
-# # pos tagger no longer available?
-# #[vp for vp in extract.matches(doc, verb_phrase3)][:5]
-# -
-
-from collections import Counter
-
-# + tags=["active-ipynb"]
-# dict(Counter(([token.pos_ for token in doc])))
-# -
-
 # ## Code Cell Analysis
 #
 # As well as reporting on markdown cells, we can also generate reports on code cells. (We could also use similar techiques to report on code blocks found in markdown cells.)
@@ -1087,7 +981,7 @@ from collections import Counter
 
 # +
 # #%pip install pyflakes
-#pyflakes seems to print the report, so we'd need to find a way to capture it
+# pyflakes seems to print the report, so we'd need to find a way to capture it
 from pyflakes.api import check
 from pyflakes.reporter import Reporter
 
@@ -1121,7 +1015,7 @@ import io
 # print(cell_execution_order, all_cells_executed, in_order_execution,)
 # -
 
-# ### Parsing IPython Code
+# ### Parsing IPython Code
 #
 # One thing to bear in mind is that code cells may contain block magic that switches code from the assumed default Python code to potentially a different language. For this reason, we might want to fall back from the `radon` metrics as a result of trying to load code into a Python AST parser when meeting cells that employ cell block magic, or explore whether an IPyhton parser could be used instead.
 
@@ -1135,9 +1029,9 @@ def sanitise_IPython_code(c):
     return c
 
 
-# The `sanitise_IPython_code()` function partially sanitises an IPython code string so that it can be passed to, and parsed by, the `radon`. Note that where magic or shell statements are used on the right hand side of an assignment statement, this will still cause an error. 
+# The `sanitise_IPython_code()` function partially sanitises an IPython code string so that it can be passed to, and parsed by, the `radon`. Note that where magic or shell statements are used on the right hand side of an assignment statement, this will still cause an error.
 
-#Use the `radon` analyzer
+# Use the `radon` analyzer
 # #%pip install radon
 from radon.raw import analyze
 
@@ -1226,13 +1120,14 @@ def process_notebook(nb, fn=''):
             _metrics = process_notebook_md_doc( nlp( cell['source'] ))
             _metrics['cell_count'] = i
             _metrics['cell_type'] = 'md'
-            cell_reports = cell_reports.append(_metrics, sort=False)
+            #cell_reports = cell_reports.append(_metrics, sort=False)
+            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
         elif cell['cell_type']=='code':
             _metrics = process_notebook_code_text(cell['source'] )
             _metrics['cell_count'] = i
             _metrics['cell_type'] = 'code'
-            cell_reports = cell_reports.append(_metrics, sort=False)
-        
+            #cell_reports = cell_reports.append(_metrics, sort=False)
+            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
     cell_reports['filename'] = fn
     cell_reports.reset_index(drop=True, inplace=True)
     return cell_reports
@@ -1254,7 +1149,7 @@ def process_notebook(nb, fn=''):
 # And let's see if our directory processor now also includes code cell statistics:
 
 # + tags=["active-ipynb"]
-# ddf2 = nb_multidir_profiler('../tm351-undercertainty/notebooks/tm351/Part 02 Notebooks')
+# ddf2 = nb_multidir_profiler(TEST_DIR)
 # ddf2['cell_type'].value_counts()
 # -
 
@@ -1284,7 +1179,7 @@ def process_notebook(nb, fn=''):
 # for d in big_feedstock:
 #     if 'tm351/Part ' in d:
 #         report_txt = report_txt + '\n\n' + report_template_simple_md.format(**big_feedstock[d])
-#     
+#
 # print(report_txt[:500])
 # -
 
@@ -1358,7 +1253,7 @@ def reporter(df, template, path_filter=''):
 #
 # To provide a glanceable, macroscopic way of comparing the size and structure of multiple notebooks, we can generate a simple visualisation based on screen line counts and colour codes for different cell types or cell state.
 #
-# Reports that include cell index and a simple line count (for example, reprting the number of code lines or screen lines for markdown) can be rendered directly as linear visualisations showing the overall structure of a notebook. 
+# Reports that include cell index and a simple line count (for example, reprting the number of code lines or screen lines for markdown) can be rendered directly as linear visualisations showing the overall structure of a notebook.
 #
 # For example:
 #
@@ -1378,23 +1273,30 @@ def reporter(df, template, path_filter=''):
 #
 # Let's start by exploring a simple representation:
 
+# +
+# #%pip install matplotlib==3.7.5
+# -
+
 import matplotlib.pyplot as plt
+# %matplotlib inline
 
 # + tags=["active-ipynb"]
 # fig, ax = plt.subplots()
 # ax.axis('off')
 #
 # #Simple representation of lines per cell and cell colour based on cell type
-# n_c = [(1,'r'),(2,'pink'), (1,'cornflowerblue'), (2,'pink')]
+# n_c = [(1, 'r'), (2, 'pink'), (1, 'cornflowerblue'), (2, 'pink')]
 #
-# x=0
-# y=0
+# x = 0
+# y = 0
 #
-# for _n_c in n_c:
-#     _y = y + _n_c[0]
-#     plt.plot([x,x], [y,_y], _n_c[1], linewidth=5)
-#     y = _y   #may want to add a gap when moving from one cell to next
+# for height, color in n_c:
+#     _y = y + height
+#     plt.plot([x, x], [y, _y], color=color, linewidth=5)
+#     y = _y  # may want to add a gap when moving from one cell to next
+#
 # plt.gca().invert_yaxis()
+# plt.show()
 # -
 
 # We can get the list of cell size and colour tuples from a notebook's report data frame:
@@ -1582,3 +1484,5 @@ def cell_attribs(cells, colour='cell_type', size='n_screen_lines'):
 # Also a count of empty cells?
 #
 # Is this moving towards some sort of notebook linter?
+
+
