@@ -24,7 +24,7 @@ setup(
         "pandas==2.2.1",
         "matplotlib==3.7.5","numpy<2",
         "spacy==3.7.5",
-        "scikit-learn==1.3.2", "scipy==1.11.4",
+        "scikit-learn==1.5.0", "scipy==1.11.4",
         "readtime",
         "list-imports",
         "pytest-codeblocks",
