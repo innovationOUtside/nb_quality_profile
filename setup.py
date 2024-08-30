@@ -6,7 +6,7 @@ from setuptools import setup
 setup(
     name="nb_quality_profile",
     packages=["nb_quality_profile"],
-    version="0.3.1",
+    version="0.3.3",
     author="Tony Hirst",
     author_email="tony.hirst@gmail.com",
     description="Tools for profiling Jupyter notebook quality and visualing notebook structure.",
@@ -28,7 +28,7 @@ setup(
         "readtime",
         "list-imports",
         "pytest-codeblocks",
-        "radon", "pyflakes"
+        "radon", "pyflakes", "seaborn"
     ],
     entry_points="""
         [console_scripts]
