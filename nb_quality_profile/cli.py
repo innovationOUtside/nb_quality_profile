@@ -19,14 +19,15 @@ def cli():
 @click.option('--gapcolor', '-G', default='lightgrey', help='Gap colour')
 @click.option('--linewidth', '-l', default=5, type=int, help='Line width')
 @click.option('--text-formats/--no-text-formats', default=True, help="Enable/disable Jupytext support.")
-def chart(path, out, gap, gapcolor, linewidth, text_formats):
+@click.option('--path-filter', '-p', default=None,help="Filter phrase for directory path")
+def chart(path, out, gap, gapcolor, linewidth, text_formats, path_filter):
 	"""Display notebook profile chart from provided file or directory path."""
 	click.echo('Using file/directory: {}'.format(path))
 	#nb_vis_parse_nb('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/Part 02 Notebooks',
     #        linewidth=10, gap=0, img_file='test-nbvis.png')
 	nb_vis_parse_nb(path, img_file=out,  linewidth = linewidth,
 					w=20, gap=gap, gap_boost=1, gap_colour=gapcolor,
-					text_formats=text_formats)
+					text_formats=text_formats, path_filter=path_filter)
 
 
 @cli.command()

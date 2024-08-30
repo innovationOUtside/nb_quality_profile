@@ -85,7 +85,7 @@ LINE_WIDTH = 160 #character width of a line of markdown text; used to calculate 
 
 CODE_CELL_REVIEW_TIME = 5 # nominal time in seconds to run each code cell / review each code cell output
 
-CELL_SKIP_TIME = 1 # nomimal time in seconds to move from one cell to the next
+CELL_SKIP_TIME = 1 # nominal time in seconds to move from one cell to the next
 # -
 
 # ## Open Notebook
@@ -725,66 +725,83 @@ def get_warnings(nb):
 #
 # reps = olc.check_multiple_links(test_links)
 # reps
-# -
 
+# + editable=true slideshow={"slide_type": ""}
 # #### Summarised Cell Level Reporting
 #
 # For the summarised cell level reporting, generate measures on a per cell basis and then calculate summary statistics over those.
+import warnings
 
+# + editable=true slideshow={"slide_type": ""}
+def safe_concat(d):
+    df = pd.DataFrame()
+    with warnings.catch_warnings():
+        warnings.simplefilter(action="ignore", category=FutureWarning)
+        if d[0].empty:
+            df = d[1].copy()
+        elif not d[1].empty:
+            df = pd.concat(d, ignore_index=True, sort=False).copy()
+    return df
+
+# + editable=true slideshow={"slide_type": ""}
 def process_notebook_md(nb, fn=''):
     """Process all the markdown cells in a notebook."""
     cell_reports = pd.DataFrame()
-    
+
     for i, cell in enumerate(nb.cells):
         if cell['cell_type']=='markdown':
             _metrics = process_notebook_md_doc( nlp( cell['source'] ))
             _metrics['cell_index'] = i
             _metrics['cell_type'] = 'md'
-            #cell_reports = cell_reports.append(_metrics, sort=False)
-            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
+            # cell_reports = cell_reports.append(_metrics, sort=False)
+            cell_reports = safe_concat(
+                        [cell_reports, _metrics]
+                    )
     cell_reports['filename'] = fn
     cell_reports.reset_index(drop=True, inplace=True)
     return cell_reports
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Processing a single notebook returns a dataframe with one row per markdown cell with each metric reported in its own column.
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # total_report = process_notebook_md(nb)
 # total_report.head(3)
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # It is trivial to create summary statistics directly from the *per* cell report table by aggregating over rows associated with the same notebook; in this case, we can find the total readtime as a simple sum.
 #
 # However, more generally we may wish to apply the aggegation over a set of grouped results (for example, in a dataframe containing materics from mutliple notebooks, we would want to group by each notebook and then perform the agggragatin on the measures associated with each notebook).
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # total_report['reading_time_mins'].sum()
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's also create a function to profile a notebook from a file:
 
-def process_notebook_file(fn):
-    """Grab cell level statistics across a whole notebook."""
-    
-    with open(fn,'r') as f:
-        try:
-            nb = nbformat.reads(f.read(), as_version=4)
-            cell_reports = process_notebook(nb, fn=fn)
-        except:
-            print(f'FAILED to process {fn}')
-            cell_reports = pd.DataFrame()
-        
-        cell_reports.reset_index(drop=True, inplace=True)
-        return cell_reports
+# + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
+# # This function is defined locally within the jupytext notrebook view
+# # THe py package version is below and is the full code and md cell processor
+# def process_notebook_file(fn):
+#     """Grab cell level statistics across a whole notebook."""
+#     nb = get_nb(fn, display_path=True)
+#     try:
+#         cell_reports = process_notebook_md(nb, fn=fn)
+#     except:
+#         print(f'FAILED to process {fn}')
+#         cell_reports = pd.DataFrame()
+#         
+#     cell_reports.reset_index(drop=True, inplace=True)
+#     return cell_reports
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
+# The `process_notebook_file()` function returns a dataframe containing row level reports for each markdown cell in a specified notebook:
 
-# The `process_notbook_file()` function returns a dataframe containing row level reports for each markdown cell in a specified notebook:
-
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # process_notebook_file(TEST_NOTEBOOK)
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ### Analysing Multiple Notebooks in the Same Directory
 #
 # As well as analysing notebooks at the notebook level, we may also want to generate individual and aggregated reports for all the notebooks contained in a single directory.
@@ -809,9 +826,12 @@ def nb_dir_profiler(path):
     """Profile all the notebooks in a specific directory."""
     nb_dir_report = pd.DataFrame()
     for _f in os.listdir(path):
-        #nb_dir_report = nb_dir_report.append( _nb_dir_profiler(path, _f), sort=False )
-        nb_dir_report = pd.concat([nb_dir_report, _nb_dir_profiler(path, _f)], ignore_index=True, sort=False)
-    #nb_dir_report['path'] = path
+        # nb_dir_report = nb_dir_report.append( _nb_dir_profiler(path, _f), sort=False )
+        _df=_nb_dir_profiler(path, _f)
+        nb_dir_report = safe_concat(
+                [nb_dir_report, _df]
+            )
+    # nb_dir_report['path'] = path
     return nb_dir_report   
 
 
@@ -825,36 +845,37 @@ def nb_dir_profiler(path):
 
 def nb_multidir_profiler(path, exclude = 'default'):
     """Profile all the notebooks in a specific directory and in any child directories."""
-    
+
     if exclude == 'default':
         exclude_paths = ['.ipynb_checkpoints', '.git', '.ipynb', '__MACOSX']
     else:
-        #If we set exclude, we need to pass it as a list
+        # If we set exclude, we need to pass it as a list
         exclude_paths = exclude
     nb_multidir_report = pd.DataFrame()
     for _path, dirs, files in os.walk(path):
-        #Start walking...
-        #If we're in a directory that is not excluded...
+        # Start walking...
+        # If we're in a directory that is not excluded...
         if not set(exclude_paths).intersection(set(_path.split('/'))):
-            #Profile that directory...
+            # Profile that directory...
             nb_dir_report = pd.DataFrame()
             for _f in files:
-                #nb_dir_report = nb_dir_report.append( _nb_dir_file_profiler(_path, _f), sort=False )
-                nb_dir_report = pd.concat([nb_dir_report, _nb_dir_file_profiler(_path, _f)], ignore_index=True, sort=False)
+                # nb_dir_report = nb_dir_report.append( _nb_dir_file_profiler(_path, _f), sort=False )
+                _df = _nb_dir_file_profiler(_path, _f)
+                nb_dir_report = safe_concat([nb_dir_report,_df])
             if not nb_dir_report.empty:
                 nb_dir_report['path'] = _path
-                #nb_multidir_report = nb_multidir_report.append(nb_dir_report, sort=False)
-                nb_multidir_report = pd.concat([nb_multidir_report, nb_dir_report], ignore_index=True, sort=False)
+                # nb_multidir_report = nb_multidir_report.append(nb_dir_report, sort=False)
+                nb_multidir_report =safe_concat([nb_multidir_report, nb_dir_report])
     if not nb_multidir_report.empty:
         nb_multidir_report = nb_multidir_report.sort_values(by=['path', 'filename'])
-    
+
         nb_multidir_report.reset_index(drop=True, inplace=True)
-    
+
     return nb_multidir_report   
 
 
 # + tags=["active-ipynb"]
-# ddf = nb_multidir_profiler(TEST_DIR)
+# ddf = nb_multidir_profiler('../../tm351/Part 02 Notebooks')
 # ddf.head()
 # -
 
@@ -862,15 +883,15 @@ def nb_multidir_profiler(path, exclude = 'default'):
 #
 # However, the larger estimate perhaps does also factor in context switching time going from one cell to another. Whilst this may be invisible to the reader if a markdown cell follows a markdown cell, it may be more evident when going from a markdown cell to a code cell. On the other hand, if a markdown cell follows another because there is a change from one subsection to another, there may be a pause for reflection as part of that context switch that *is* captured by the rounding.
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # ddf.groupby(['path','filename'])[['n_total_code_lines','n_words',
 #                                   'reading_time_mins', 'reading_time_s' ]].sum()
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # ddf_dict = ddf.groupby(['path'])[['n_words', 'reading_time_mins',  'reading_time_s' ]].sum().to_dict(orient='index')
 # ddf_dict
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ## Reporting Templates
 #
 # It's all very well having the data in a dataframe, but it could be more useful to be able to generate some written reports. So what might an example report look like?
@@ -884,23 +905,25 @@ def nb_multidir_profiler(path, exclude = 'default'):
 #
 # It might also be useful to provide simple rule (cf. linter rules) that raise warnings about notebooks that go against best practice. For example, notebooks with word counts / code line counts or reading or completion times that exceed recommended limits.
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's start with a simple template:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # report_template_simple_md = '''
 # In directory `{path}` there were {nb_count} notebooks.
 # The total markdown wordcount for the notebooks in the directory was {n_words} words,
 # with an estimated total reading time of {reading_time_mins} minutes.
 # '''
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # We can feed this from a `dict` containing fields required by the report template:
 
+# + editable=true slideshow={"slide_type": ""}
 # #%pip install deepmerge
 from deepmerge import always_merger
 
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # notebook_counts_by_dir = ddf.groupby(['path'])['filename'].nunique().to_dict()
 # notebook_counts_by_dir = {k:{'nb_count':notebook_counts_by_dir[k]} for k in notebook_counts_by_dir}
 #
@@ -908,16 +931,17 @@ from deepmerge import always_merger
 # for k in report_dict:
 #     report_dict[k]['path'] = k
 # report_dict
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Feeding the `dict` to the template generates the report:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # report_template_simple_md.format(**report_dict[TEST_DIR])
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Create a function to make it easier to generate the feedstocl `dict`:
 
+# + editable=true slideshow={"slide_type": ""}
 def notebook_report_feedstock_md_test(ddf):
     """Create a feedstock dict for report generation. Keyed by directory path."""
     ddf_dict = ddf.groupby(['path'])[['n_words', 'reading_time_mins',  'reading_time_s' ]].sum().to_dict(orient='index')
@@ -933,12 +957,13 @@ def notebook_report_feedstock_md_test(ddf):
     return report_dict
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # We can now use the `notebook_report_feedstock()` function to generate the feedstock `dict` directlry from the report dataframe:
 
-# + tags=["active-ipynb"]
+# + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
 # notebook_report_feedstock_md_test(ddf)
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ## Code Cell Analysis
 #
 # As well as reporting on markdown cells, we can also generate reports on code cells. (We could also use similar techiques to report on code blocks found in markdown cells.)
@@ -963,11 +988,12 @@ def notebook_report_feedstock_md_test(ddf):
 # - a markdown cell commenting on the output of a code cell immediately preceding may be appropriate in some cases;
 # - one cell should be defined per code cell. A markdown cell immediately following a code cell that defines a function might include a line of text that might also serve as the function doc text, describing what the function does an dprefacing a code cell that demonstrates the behaviour of the function.
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ### Generating code reports over a single notebook
 #
 # Let's start to put together some metrics we can run against code cells, either at an individual level or from code aggregated from across all the code cells in a notebook.
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # c='''#print\nimport pandas\n\nprint('a')\nimport abjad\nimport numpy as np\nfrom IPython.display import HTML, JSON'''
 #
 # #https://github.com/andrewp-as-is/list-imports.py #list imports
@@ -977,11 +1003,11 @@ def notebook_report_feedstock_md_test(ddf):
 # #Would also need to capture magics?
 #
 # # TO DO  - NOT CURRENTLY REPORTED
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Some utilities may not make sense in the reporting when applied at a cell level. For example, it's quite likely that a package imported into a cell may not be used in that cell, which `pyflakes` would report unfavourably on:
 
-# +
+# + editable=true slideshow={"slide_type": ""}
 # #%pip install pyflakes
 # pyflakes seems to print the report, so we'd need to find a way to capture it
 from pyflakes.api import check
@@ -990,17 +1016,17 @@ from pyflakes.reporter import Reporter
 import io
 
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # output_w = io.StringIO()
 # output_e = io.StringIO()
 #
 # check('''import pandas as pd''', 'dummy', Reporter(output_w, output_e))
 # output_w.getvalue()
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Another form of analysis that only makes sense at the notebook level is the code cell execution analysis:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # # Check execution across notebook - TO DO - NOT CURRENTLY REPORTED
 # cell_execution_order = []
 # num_code_cells = 0
@@ -1015,14 +1041,16 @@ import io
 #
 # all_cells_executed = len(_executed_cells)==num_code_cells
 # print(cell_execution_order, all_cells_executed, in_order_execution,)
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ### Parsing IPython Code
 #
 # One thing to bear in mind is that code cells may contain block magic that switches code from the assumed default Python code to potentially a different language. For this reason, we might want to fall back from the `radon` metrics as a result of trying to load code into a Python AST parser when meeting cells that employ cell block magic, or explore whether an IPyhton parser could be used instead.
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's try to cleanse IPython directives such as shell commands (`!` prefix) or magics (`%` prefix) from a code string so that we can present it to `radon`.
 
+# + editable=true slideshow={"slide_type": ""}
 def sanitise_IPython_code(c):
     """Cleanse an IPython code string so we can parse it with radon."""
     #Comment out magic and shell commands
@@ -1031,14 +1059,16 @@ def sanitise_IPython_code(c):
     return c
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # The `sanitise_IPython_code()` function partially sanitises an IPython code string so that it can be passed to, and parsed by, the `radon`. Note that where magic or shell statements are used on the right hand side of an assignment statement, this will still cause an error.
 
+# + editable=true slideshow={"slide_type": ""}
 # Use the `radon` analyzer
 # #%pip install radon
 from radon.raw import analyze
 
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # c = '''%load_ext magic\nimport pandas\n\n!ls\nprint(a)'''
 # c = sanitise_IPython_code(c)
 #
@@ -1047,10 +1077,11 @@ from radon.raw import analyze
 #     n_single_line_comment_code_lines, n_code_lines = r_analyze(sanitise_IPython_code(c))
 #
 # n_total_code_lines, n_blank_code_lines, n_single_line_comment_code_lines, n_code_lines
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # To parse a code cell, we can try to use the `radon` analyser, with a sanitised code string, or fall back to using the simpler code sanitiser. It will also be convenient to return the results as a Python `dict` object.
 
+# + editable=true slideshow={"slide_type": ""}
 def robust_code_cell_analyse(c, parser='radon'):
     """Use the `radon` code analyser if we can else fall back to the simple custom code analyser."""
     
@@ -1088,15 +1119,17 @@ def robust_code_cell_analyse(c, parser='radon'):
     return response
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # The robust analyser should cope with  a variety of strings.
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # print(robust_code_cell_analyse('import pandas\n\n# comment\n!ls'))
 # print(robust_code_cell_analyse('%%sql\nSELECT * FROM TABLE'))
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # We now need to start pulling together a function that we can cal to run the basic report and other code cell reports.
 
+# + editable=true slideshow={"slide_type": ""}
 def process_notebook_code_text(txt):
     """Generate code cell report."""
     report = pd.DataFrame()
@@ -1105,14 +1138,16 @@ def process_notebook_code_text(txt):
                           **basic_code_report }])
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # The report generates a single row report dataframe from a code string:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # process_notebook_code_text('import pandas\n\n# comment\n!ls')
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # In order to process code cells as well as markdown cells in our notebook processer, we will need build on the `process_notebook_md()` function to create a more general one. Note that the current approach will give us an inefficient dataframe, column wise, in that whilst each row represents the report from a code cell *or* a markdown cell, the columns cover reports from both code *and* markdown cells.
 
+# + editable=true slideshow={"slide_type": ""}
 def process_notebook(nb, fn=''):
     """Process all the markdown and code cells in a notebook."""
     cell_reports = pd.DataFrame()
@@ -1123,59 +1158,76 @@ def process_notebook(nb, fn=''):
             _metrics['cell_index'] = i
             _metrics['cell_type'] = 'md'
             # cell_reports = cell_reports.append(_metrics, sort=False)
-            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
+            cell_reports = safe_concat([cell_reports, _metrics])
         elif cell['cell_type']=='code':
             _metrics = process_notebook_code_text(cell['source'] )
             _metrics["cell_index"] = i
             _metrics['cell_type'] = 'code'
             # cell_reports = cell_reports.append(_metrics, sort=False)
-            cell_reports = pd.concat([cell_reports, _metrics], ignore_index=True, sort=False)
+            cell_reports = safe_concat([cell_reports, _metrics])
     cell_reports['filename'] = fn
     cell_reports.reset_index(drop=True, inplace=True)
     return cell_reports
 
 
+# + editable=true slideshow={"slide_type": ""}
+# This is the full code and markdown processor
+def process_notebook_file(fn):
+    """Grab cell level statistics across a whole notebook."""
+    
+    nb = get_nb(fn, display_path=False)
+    try:
+        cell_reports = process_notebook(nb, fn=fn)
+    except:
+        print(f'FAILED to process {fn}')
+        cell_reports = pd.DataFrame()
+        
+    cell_reports.reset_index(drop=True, inplace=True)
+    return cell_reports
+
+
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # We should now be able to generate a report that includes statistics from code as well as markdown cells.
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # report = process_notebook(nb)
 # report.head(5)
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's just check what columns we are potentially reporting on:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # report.columns
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # And let's see if our directory processor now also includes code cell statistics:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # ddf2 = nb_multidir_profiler(TEST_DIR)
 # ddf2['cell_type'].value_counts()
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's also check to see how the code cells are reported:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # code_cols = [c for c in ddf2.columns if 'code' in c]
 # ddf2[ddf2['cell_type']=='code'][code_cols].sum()
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # ### Generating Reports Across Multiple Directories
 #
 # We are now in a position to start generating rich report for notebooks across several directories.
 #
 # Let's grab data for notebooks across an example set of directories:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # #ddf3 = nb_multidir_profiler('../tm351-undercertainty/notebooks/tm351/')
 # ddf3=ddf2
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # And just quickly test we can generate a report that summarises the notebooks in each directory:
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # big_feedstock = notebook_report_feedstock_md_test(ddf3)
 # report_txt=''
 # for d in big_feedstock:
@@ -1183,20 +1235,21 @@ def process_notebook(nb, fn=''):
 #         report_txt = report_txt + '\n\n' + report_template_simple_md.format(**big_feedstock[d])
 #
 # print(report_txt[:500])
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's update the report template and the report feedstock function.
 #
 # First, what shall we report on?
 
-# + tags=["active-ipynb"]
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
 # ddf3.columns
-# -
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Let's make a start on a complete report template...
 
+# + editable=true slideshow={"slide_type": ""}
 report_template_dir = '''
-In directory `{path}` there were {nb_count} notebooks.
+In directory `{path}` there are {nb_count} notebooks.
 
 - total markdown wordcount {n_words} words across {n_md_cells} markdown cells
 - total code line count of {n_total_code_lines} lines of code across {n_code_cells} code cells
@@ -1206,8 +1259,9 @@ Estimated total reading time of {reading_time_mins} minutes.
 
 '''
 
+# + editable=true slideshow={"slide_type": ""}
 report_template_nb = """
-Report for {name}
+Report for {path}/{name}:
 
 - total markdown wordcount {n_words} words across {n_md_cells} markdown cells
 - total code line count of {n_total_code_lines} lines of code across {n_code_cells} code cells
@@ -1217,6 +1271,7 @@ Estimated total reading time of {reading_time_mins} minutes.
 
 """
 
+# + editable=true slideshow={"slide_type": ""}
 # Now let's add those extra requirements to the the feedstock generator:
 def notebook_report_feedstock(ddf, grouper=None):
     """Create a feedstock dict for report generation. Keyed by directory path and optionally by name."""
@@ -1260,36 +1315,172 @@ def notebook_report_feedstock(ddf, grouper=None):
 
     return report_dict
 
+# + editable=true slideshow={"slide_type": ""}
 from collections import defaultdict
 
-def multi_level_reporter(df, dir_template, item_template, path_filter=""):
-    """Generate a multi-level report with directory and item level information."""
+
+# + editable=true slideshow={"slide_type": ""}
+def notebook_report_feedstock(ddf, grouper=None):
+    """Create a feedstock dict for report generation. Keyed by directory path and optionally by name."""
+    if grouper is None:
+        grouper = ["path"]
+
+    ddf_dict = (
+        ddf.groupby(grouper)[
+            [
+                "n_words",
+                "reading_time_mins",
+                "reading_time_s",
+                "n_code_lines",
+                "n_single_line_comment_code_lines",
+                "n_total_code_lines",
+                "n_blank_code_lines",
+            ]
+        ]
+        .sum()
+        .to_dict(orient="index")
+    )
+
+    notebook_counts = ddf.groupby(grouper)["filename"].nunique().to_dict()
+    notebook_counts = {k: {"nb_count": notebook_counts[k]} for k in notebook_counts}
+
+    report_dict = always_merger.merge(ddf_dict, notebook_counts)
+
+    code_cell_counts = ddf[ddf["cell_type"] == "code"].groupby(grouper).size().to_dict()
+    md_cell_counts = ddf[ddf["cell_type"] == "md"].groupby(grouper).size().to_dict()
+
+    for k in report_dict:
+        report_dict[k]["path"] = k[0] if isinstance(k, tuple) else k
+        if isinstance(k, tuple) and len(k) > 1:
+            report_dict[k]["name"] = k[1]
+        report_dict[k]["n_code_cells"] = (
+            code_cell_counts[k] if k in code_cell_counts else "NA"
+        )
+        report_dict[k]["n_md_cells"] = (
+            md_cell_counts[k] if k in md_cell_counts else "NA"
+        )
+
+    return report_dict
+
+# + editable=true slideshow={"slide_type": ""}
+# via claude.ai
+def multi_level_reporter(
+    df,
+    dir_template,
+    item_template,
+    path_filter="",
+    group_by_dir=True,
+    include_dir_report=True,
+    dir_separator="",
+):
+    """
+    Generate a multi-level report with directory and item level information.
+
+    Args:
+    df (DataFrame): The input dataframe
+    dir_template (str): Template string for directory-level reports
+    item_template (str): Template string for item-level reports
+    path_filter (str): Filter string for paths
+    group_by_dir (bool): If True, group reports by directory. If False, list all directory reports first, then all item reports.
+    include_dir_report (bool): If False, only item reports will be generated
+    dir_separator (str): String to insert between directory reports (e.g., '---' for a line break)
+    """
     dir_feedstock = notebook_report_feedstock(df, grouper=["path"])
     item_feedstock = notebook_report_feedstock(df, grouper=["path", "name"])
 
-    report_txt = ""
-    item_reports = defaultdict(str)
+    if group_by_dir:
+        return _grouped_report(
+            dir_feedstock,
+            item_feedstock,
+            dir_template,
+            item_template,
+            path_filter,
+            include_dir_report,
+            dir_separator,
+        )
+    else:
+        return _separated_report(
+            dir_feedstock,
+            item_feedstock,
+            dir_template,
+            item_template,
+            path_filter,
+            include_dir_report,
+            dir_separator,
+        )
 
-    # Generate item-level reports
+
+# + editable=true slideshow={"slide_type": ""}
+def _grouped_report(
+    dir_feedstock,
+    item_feedstock,
+    dir_template,
+    item_template,
+    path_filter,
+    include_dir_report,
+    dir_separator,
+):
+    """Generate a report where each directory report is immediately followed by its item reports."""
+    report_txt = ""
+    item_reports = defaultdict(list)
+
+    # Group item reports by directory
     for item in item_feedstock:
         if path_filter in item[0]:  # item[0] is the path
             item_report = item_template.format(**item_feedstock[item])
-            item_reports[item[0]] += "\n" + item_report
+            item_reports[item[0]].append(item_report)
 
-    # Generate directory-level reports with nested item reports
-    for directory in dir_feedstock:
+    # Generate directory reports with nested item reports
+    for i, directory in enumerate(dir_feedstock):
         if path_filter in directory:
-            dir_report = dir_template.format(**dir_feedstock[directory])
-            report_txt += "\n\n" + dir_report
+            if include_dir_report:
+                dir_report = dir_template.format(**dir_feedstock[directory])
+                report_txt += ("\n\n" if i > 0 else "") + dir_report
             if directory in item_reports:
-                report_txt += "\n" + item_reports[directory]
+                report_txt += "\n" + "\n".join(item_reports[directory])
+            if dir_separator and i < len(dir_feedstock) - 1:
+                report_txt += f"\n\n{dir_separator}"
 
     return report_txt
 
 
+# + editable=true slideshow={"slide_type": ""}
+def _separated_report(
+    dir_feedstock,
+    item_feedstock,
+    dir_template,
+    item_template,
+    path_filter,
+    include_dir_report,
+    dir_separator,
+):
+    """Generate a report with all directory reports first, followed by all item reports."""
+    dir_report_txt = ""
+    item_report_txt = ""
+
+    # Generate all directory reports
+    if include_dir_report:
+        for i, directory in enumerate(dir_feedstock):
+            if path_filter in directory:
+                dir_report = dir_template.format(**dir_feedstock[directory])
+                dir_report_txt += ("\n\n" if i > 0 else "") + dir_report
+                if dir_separator and i < len(dir_feedstock) - 1:
+                    dir_report_txt += f"\n\n{dir_separator}"
+
+    # Generate all item reports
+    for item in item_feedstock:
+        if path_filter in item[0]:  # item[0] is the path
+            item_report = item_template.format(**item_feedstock[item])
+            item_report_txt += "\n" + item_report
+
+    return (dir_report_txt + "\n\n" + item_report_txt).strip()
+
+
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # Create a wrapper function for generating the report text:
 
-def reporter(df, template, path_filter='', nb_report=True):
+# + editable=true slideshow={"slide_type": ""}
+def simple_reporter(df, template, path_filter='', nb_report=True):
     feedstock = notebook_report_feedstock(df)
     report_txt=''
     for d in feedstock:
@@ -1298,15 +1489,66 @@ def reporter(df, template, path_filter='', nb_report=True):
     return report_txt
 
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
 # We can now use the `reporter()` function to generate a report based on filtered paths from a report dataframe and a template:
 
-# + tags=["active-ipynb"]
-# print(reporter(ddf2, report_template_full, 'tm351/Part '))
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
+# #print(simple_reporter(ddf2, report_template_full, 'tm351/Part '))
 
-# + tags=["active-ipynb"]
-# print(reporter(ddf3, report_template_full, 'tm351/Part ').replace('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/',''))
-# -
+# + tags=["active-ipynb"] editable=true slideshow={"slide_type": ""}
+# #print(simple_reporter(ddf3, report_template_full, 'tm351/Part ').replace('../Documents/GitHub/tm351-undercertainty/notebooks/tm351/',''))
 
+# + [markdown] editable=true slideshow={"slide_type": ""}
+# ### Generate Charts to Visualise Notebook Stats
+#
+# Generate some simple chart versions of the reports.
+#
+# For example, bar charts of cell counts by notebook by directory.
+
+# + editable=true slideshow={"slide_type": ""}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
+#
+#
+# # Count the number of md and code cells for each notebook
+# count_df = ddf2.groupby(['filename', 'cell_type']).size().reset_index(name='count')
+#
+# # Create the bar plot
+# sns.barplot(x="filename", y="count", hue="cell_type", data=count_df)
+#
+# # Customize the plot
+# plt.title("Count of Markdown and Code Cells per Notebook")
+# plt.ylabel("Number of Cells")
+# plt.xlabel("Notebook")
+# plt.xticks(rotation=45)  # Rotate notebook names if needed
+# plt.legend(title="Cell Type")
+
+# + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
+#
+# # Iterate over each unique path
+# for directory in ddf2["path"].unique():
+#     # Filter the DataFrame for the current directory
+#     directory_df = ddf2[ddf2["path"] == directory]
+#     
+#     # Count the number of md and code cells for each notebook within the directory
+#     count_df = directory_df.groupby(['filename', 'cell_type']).size().reset_index(name='count')
+#     
+#     # Create the bar plot
+#     sns.barplot(x="filename", y="count", hue="cell_type", data=count_df)
+#     
+#     # Customize the plot
+#     plt.title(f"Count of Markdown and Code Cells for Notebooks in {directory}")
+#     plt.ylabel("Number of Cells")
+#     plt.xlabel("Notebook")
+#     plt.xticks(rotation=45, ha='right')  # Rotate notebook names if needed
+#     plt.legend(title="Cell Type")
+#     
+#     # Show the plot
+#     plt.show()
+
+# + [markdown] jp-MarkdownHeadingCollapsed=true editable=true slideshow={"slide_type": ""}
 # ## Visualising Notebook Structure
 #
 # To provide a glanceable, macroscopic way of comparing the size and structure of multiple notebooks, we can generate a simple visualisation based on screen line counts and colour codes for different cell types or cell state.

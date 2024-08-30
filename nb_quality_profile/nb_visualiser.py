@@ -131,7 +131,8 @@ import os
 import textwrap
 from glob import glob
 
-def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
+from .notebook_profiler import safe_concat
+def nb_big_parse_nb(path='', text_formats=True, raw='', path_filter=None, **kwargs):
     """Parse one or more notebooks on a path."""
 
     def _count_screen_lines(txt, width=LINE_WIDTH):
@@ -252,11 +253,8 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
                     nb_multidir_text_report = {**nb_multidir_text_report, fn: text_report}
                 if big_report:
                     nb_multidir_big_report = {**nb_multidir_big_report,  fn: big_report}
-                if not big_report_df.empty:
-                    very_big_report_df = concat(
-                        [very_big_report_df, big_report_df],
-                        ignore_index=True,
-                        sort=False,
+                very_big_report_df = safe_concat(
+                        [very_big_report_df, big_report_df]
                     )
         return {
             "cell_map": nb_multidir_cell_map,
@@ -290,9 +288,11 @@ def nb_big_parse_nb(path='', text_formats=True, raw='',  **kwargs):
             "big_report_df": big_report_df}
 
 
-def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', raw='', **kwargs):
+def nb_vis_parse_nb(path='.', img_file='', linewidth = 5, w=20, text_formats=True, retval='', raw='', path_filter=None, **kwargs):
     """Do a big parse and then chart the result."""
-    reports = nb_big_parse_nb(path, text_formats, raw=raw, **kwargs)
+    reports = nb_big_parse_nb(
+        path, text_formats, raw=raw, path_filter=path_filter, **kwargs
+    )
     cell_map = reports["cell_map"]
     response = nb_vis(cell_map, img_file, linewidth, w, retval=retval, **kwargs)
     if retval:
@@ -376,7 +376,6 @@ def nb_imports_parse_nb(path='.', text_formats=True,
     # pkg_resources.Requirement('pandas').project_name
 
 from .notebook_profiler import (
-    reporter,
     report_template_dir,
     report_template_nb,
     multi_level_reporter,
@@ -385,14 +384,17 @@ from .notebook_profiler import (
 def nb_text_parse_nb(path='.', text_formats=True, reading_rate=100, rounded_minutes=False, raw=''):
     """Parse markdown text in notebook(s)."""
     reports = nb_big_parse_nb(path, text_formats, reading_rate=reading_rate, rounded_minutes=rounded_minutes, raw=raw)
-    print("\nTEXT REPORT\n",reports['text_report'])
+    # print("\nTEXT REPORT\n",reports['text_report'])
     print("\n\nIMPORTS REPORT\n",reports["imports"])
-    #print("\n\BIG REPORT\n", reports["big_report"], "\n\n")
+    # print("\n\BIG REPORT\n", reports["big_report"], "\n\n")
 
     # print(reporter(reports["big_report_df"], report_template_full))
     print(
         multi_level_reporter(
-            reports["big_report_df"], report_template_dir, report_template_nb
+            reports["big_report_df"],
+            report_template_dir,
+            report_template_nb,
+            dir_separator="\n\n---------\n\n"
         )
     )
     # print(reports)
