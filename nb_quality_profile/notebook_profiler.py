@@ -1510,8 +1510,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
-#
-#
 # # Count the number of md and code cells for each notebook
 # count_df = ddf2.groupby(['filename', 'cell_type']).size().reset_index(name='count')
 #
@@ -1526,7 +1524,6 @@ import matplotlib.pyplot as plt
 # plt.legend(title="Cell Type")
 
 # + editable=true slideshow={"slide_type": ""} tags=["active-ipynb"]
-#
 # # Iterate over each unique path
 # for directory in ddf2["path"].unique():
 #     # Filter the DataFrame for the current directory
@@ -1548,7 +1545,7 @@ import matplotlib.pyplot as plt
 #     # Show the plot
 #     plt.show()
 
-# + [markdown] jp-MarkdownHeadingCollapsed=true editable=true slideshow={"slide_type": ""}
+# + [markdown] slideshow={"slide_type": ""}
 # ## Visualising Notebook Structure
 #
 # To provide a glanceable, macroscopic way of comparing the size and structure of multiple notebooks, we can generate a simple visualisation based on screen line counts and colour codes for different cell types or cell state.
@@ -1573,7 +1570,7 @@ import matplotlib.pyplot as plt
 #
 # Let's start by exploring a simple representation:
 
-# +
+# + editable=true slideshow={"slide_type": ""}
 # #%pip install matplotlib==3.7.5
 # -
 

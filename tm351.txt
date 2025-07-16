@@ -1,0 +1,1600 @@
+Using file/directory: ../tm351/
+
+
+In directory `../tm351` there are 4 notebooks.
+
+- total markdown wordcount 1910.0 words across 49 markdown cells
+- total code line count of 194 lines of code across 71 code cells
+  - 119 code lines, 58 comment lines and 17 blank lines
+
+Estimated total reading time of 126 minutes.
+
+
+
+Report for ../tm351/TM351 VM Installation Test.ipynb:
+
+- total markdown wordcount 358.0 words across 18 markdown cells
+- total code line count of 116 lines of code across 35 code cells
+  - 61 code lines, 43 comment lines and 12 blank lines
+
+Estimated total reading time of 54 minutes.
+
+
+
+Report for ../tm351/TM351_remote_VCE_test.ipynb:
+
+- total markdown wordcount 456.0 words across 21 markdown cells
+- total code line count of 67 lines of code across 31 code cells
+  - 50 code lines, 12 comment lines and 5 blank lines
+
+Estimated total reading time of 51 minutes.
+
+
+
+Report for ../tm351/Using Jupyter Notebooks - READ ME FIRST.ipynb:
+
+- total markdown wordcount 1096.0 words across 10 markdown cells
+- total code line count of 10 lines of code across 4 code cells
+  - 8 code lines, 2 comment lines and 0 blank lines
+
+Estimated total reading time of 20 minutes.
+
+
+
+Report for ../tm351/grepping-notebooks.ipynb:
+
+- total markdown wordcount 0.0 words across NA markdown cells
+- total code line count of 1 lines of code across 1 code cells
+  - 0 code lines, 1 comment lines and 0 blank lines
+
+Estimated total reading time of 1 minutes.
+
+
+
+---------
+
+
+
+In directory `../tm351/Part 01 Notebooks` there are 6 notebooks.
+
+- total markdown wordcount 8114.0 words across 210 markdown cells
+- total code line count of 506 lines of code across 139 code cells
+  - 370 code lines, 62 comment lines and 69 blank lines
+
+Estimated total reading time of 376 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.1 Getting started with IPython and Jupyter Notebooks - Bootcamp.ipynb:
+
+- total markdown wordcount 2559.0 words across 30 markdown cells
+- total code line count of 16 lines of code across 6 code cells
+  - 5 code lines, 10 comment lines and 1 blank lines
+
+Estimated total reading time of 51 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.2 Python recap.ipynb:
+
+- total markdown wordcount 713.0 words across 22 markdown cells
+- total code line count of 65 lines of code across 15 code cells
+  - 51 code lines, 5 comment lines and 11 blank lines
+
+Estimated total reading time of 39 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.3 Basic python data structures.ipynb:
+
+- total markdown wordcount 1546.0 words across 74 markdown cells
+- total code line count of 175 lines of code across 67 code cells
+  - 140 code lines, 21 comment lines and 14 blank lines
+
+Estimated total reading time of 143 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.4 Defining new functions in python.ipynb:
+
+- total markdown wordcount 1443.0 words across 55 markdown cells
+- total code line count of 212 lines of code across 40 code cells
+  - 148 code lines, 16 comment lines and 39 blank lines
+
+Estimated total reading time of 96 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.5 Python file handling.ipynb:
+
+- total markdown wordcount 392.0 words across 13 markdown cells
+- total code line count of 23 lines of code across 9 code cells
+  - 16 code lines, 5 comment lines and 2 blank lines
+
+Estimated total reading time of 22 minutes.
+
+
+
+Report for ../tm351/Part 01 Notebooks/01.X Customising the Notebook Environment.ipynb:
+
+- total markdown wordcount 1461.0 words across 16 markdown cells
+- total code line count of 15 lines of code across 2 code cells
+  - 10 code lines, 5 comment lines and 2 blank lines
+
+Estimated total reading time of 25 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 02 Notebooks` there are 6 notebooks.
+
+- total markdown wordcount 11039.0 words across 264 markdown cells
+- total code line count of 526 lines of code across 174 code cells
+  - 363 code lines, 94 comment lines and 63 blank lines
+
+Estimated total reading time of 462 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.1 Pandas Dataframes.ipynb:
+
+- total markdown wordcount 2868.0 words across 94 markdown cells
+- total code line count of 174 lines of code across 70 code cells
+  - 141 code lines, 13 comment lines and 13 blank lines
+
+Estimated total reading time of 167 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.2.0 Data file formats - file encodings.ipynb:
+
+- total markdown wordcount 1327.0 words across 29 markdown cells
+- total code line count of 42 lines of code across 12 code cells
+  - 26 code lines, 9 comment lines and 7 blank lines
+
+Estimated total reading time of 45 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.2.1 Data file formats - CSV.ipynb:
+
+- total markdown wordcount 3225.0 words across 66 markdown cells
+- total code line count of 107 lines of code across 42 code cells
+  - 78 code lines, 19 comment lines and 10 blank lines
+
+Estimated total reading time of 116 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.2.2 Data file formats - JSON.ipynb:
+
+- total markdown wordcount 1001.0 words across 25 markdown cells
+- total code line count of 45 lines of code across 17 code cells
+  - 37 code lines, 5 comment lines and 3 blank lines
+
+Estimated total reading time of 42 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.2.3 Data file formats - other.ipynb:
+
+- total markdown wordcount 1795.0 words across 31 markdown cells
+- total code line count of 50 lines of code across 17 code cells
+  - 21 code lines, 18 comment lines and 11 blank lines
+
+Estimated total reading time of 56 minutes.
+
+
+
+Report for ../tm351/Part 02 Notebooks/02.A Appendix – Fake Data Generation (Optional).ipynb:
+
+- total markdown wordcount 823.0 words across 19 markdown cells
+- total code line count of 108 lines of code across 16 code cells
+  - 60 code lines, 30 comment lines and 19 blank lines
+
+Estimated total reading time of 36 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 03 Notebooks` there are 4 notebooks.
+
+- total markdown wordcount 13378.0 words across 344 markdown cells
+- total code line count of 1041 lines of code across 200 code cells
+  - 766 code lines, 135 comment lines and 142 blank lines
+
+Estimated total reading time of 580 minutes.
+
+
+
+Report for ../tm351/Part 03 Notebooks/03.1 Cleaning data.ipynb:
+
+- total markdown wordcount 1803.0 words across 43 markdown cells
+- total code line count of 154 lines of code across 34 code cells
+  - 111 code lines, 39 comment lines and 5 blank lines
+
+Estimated total reading time of 83 minutes.
+
+
+
+Report for ../tm351/Part 03 Notebooks/03.2 Selecting and projecting, sorting and limiting.ipynb:
+
+- total markdown wordcount 2790.0 words across 96 markdown cells
+- total code line count of 187 lines of code across 53 code cells
+  - 131 code lines, 17 comment lines and 39 blank lines
+
+Estimated total reading time of 155 minutes.
+
+
+
+Report for ../tm351/Part 03 Notebooks/03.3 Combining data from multiple datasets.ipynb:
+
+- total markdown wordcount 6821.0 words across 161 markdown cells
+- total code line count of 501 lines of code across 77 code cells
+  - 370 code lines, 62 comment lines and 70 blank lines
+
+Estimated total reading time of 257 minutes.
+
+
+
+Report for ../tm351/Part 03 Notebooks/03.4 Handling missing data.ipynb:
+
+- total markdown wordcount 1964.0 words across 44 markdown cells
+- total code line count of 199 lines of code across 36 code cells
+  - 154 code lines, 17 comment lines and 28 blank lines
+
+Estimated total reading time of 85 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 04 Notebooks` there are 10 notebooks.
+
+- total markdown wordcount 20846.0 words across 470 markdown cells
+- total code line count of 1340 lines of code across 312 code cells
+  - 1001 code lines, 203 comment lines and 135 blank lines
+
+Estimated total reading time of 821 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.1 Crosstabs and pivot tables.ipynb:
+
+- total markdown wordcount 1526.0 words across 29 markdown cells
+- total code line count of 53 lines of code across 17 code cells
+  - 40 code lines, 11 comment lines and 2 blank lines
+
+Estimated total reading time of 48 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.2 Descriptive statistics in pandas.ipynb:
+
+- total markdown wordcount 962.0 words across 22 markdown cells
+- total code line count of 67 lines of code across 23 code cells
+  - 50 code lines, 12 comment lines and 5 blank lines
+
+Estimated total reading time of 46 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.3 Simple visualisations in pandas.ipynb:
+
+- total markdown wordcount 4557.0 words across 80 markdown cells
+- total code line count of 216 lines of code across 41 code cells
+  - 167 code lines, 22 comment lines and 26 blank lines
+
+Estimated total reading time of 135 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.4 Activity 4.4 Walk-through.ipynb:
+
+- total markdown wordcount 1857.0 words across 53 markdown cells
+- total code line count of 164 lines of code across 30 code cells
+  - 139 code lines, 10 comment lines and 16 blank lines
+
+Estimated total reading time of 83 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.5 Split-apply-combine with SQL and pandas.ipynb:
+
+- total markdown wordcount 4111.0 words across 96 markdown cells
+- total code line count of 216 lines of code across 57 code cells
+  - 161 code lines, 25 comment lines and 31 blank lines
+
+Estimated total reading time of 161 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.6 Introducing regular expressions.ipynb:
+
+- total markdown wordcount 3175.0 words across 71 markdown cells
+- total code line count of 276 lines of code across 53 code cells
+  - 174 code lines, 67 comment lines and 33 blank lines
+
+Estimated total reading time of 133 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.7 Reshaping data with pandas.ipynb:
+
+- total markdown wordcount 1433.0 words across 47 markdown cells
+- total code line count of 115 lines of code across 33 code cells
+  - 85 code lines, 18 comment lines and 12 blank lines
+
+Estimated total reading time of 83 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.A Optional data aggregation and manipulation practice.ipynb:
+
+- total markdown wordcount 904.0 words across 18 markdown cells
+- total code line count of 4 lines of code across 11 code cells
+  - 0 code lines, 4 comment lines and 0 blank lines
+
+Estimated total reading time of 25 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.B Optional data aggregation and manipulation practice (worked example).ipynb:
+
+- total markdown wordcount 1028.0 words across 24 markdown cells
+- total code line count of 93 lines of code across 21 code cells
+  - 68 code lines, 18 comment lines and 7 blank lines
+
+Estimated total reading time of 49 minutes.
+
+
+
+Report for ../tm351/Part 04 Notebooks/04.C Simple visualisations using pandas plot (optional).ipynb:
+
+- total markdown wordcount 1293.0 words across 30 markdown cells
+- total code line count of 136 lines of code across 26 code cells
+  - 117 code lines, 16 comment lines and 3 blank lines
+
+Estimated total reading time of 58 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 05 Notebooks` there are 4 notebooks.
+
+- total markdown wordcount 10675.0 words across 163 markdown cells
+- total code line count of 878 lines of code across 99 code cells
+  - 585 code lines, 146 comment lines and 149 blank lines
+
+Estimated total reading time of 302 minutes.
+
+
+
+Report for ../tm351/Part 05 Notebooks/05.1 Anscombe's Quartet and Correlated Scatterplots  - visualising data.ipynb:
+
+- total markdown wordcount 1834.0 words across 30 markdown cells
+- total code line count of 82 lines of code across 12 code cells
+  - 51 code lines, 22 comment lines and 9 blank lines
+
+Estimated total reading time of 46 minutes.
+
+
+
+Report for ../tm351/Part 05 Notebooks/05.2 Getting started with maps - folium.ipynb:
+
+- total markdown wordcount 4251.0 words across 43 markdown cells
+- total code line count of 359 lines of code across 29 code cells
+  - 245 code lines, 53 comment lines and 60 blank lines
+
+Estimated total reading time of 95 minutes.
+
+
+
+Report for ../tm351/Part 05 Notebooks/05.3 More charting with seaborn.ipynb:
+
+- total markdown wordcount 3295.0 words across 62 markdown cells
+- total code line count of 251 lines of code across 37 code cells
+  - 176 code lines, 42 comment lines and 39 blank lines
+
+Estimated total reading time of 110 minutes.
+
+
+
+Report for ../tm351/Part 05 Notebooks/05.X Optional notes on Geo data formats.ipynb:
+
+- total markdown wordcount 1295.0 words across 28 markdown cells
+- total code line count of 186 lines of code across 21 code cells
+  - 113 code lines, 29 comment lines and 41 blank lines
+
+Estimated total reading time of 51 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 07 Notebooks` there are 3 notebooks.
+
+- total markdown wordcount 8256.0 words across 173 markdown cells
+- total code line count of 179 lines of code across 30 code cells
+  - 118 code lines, 27 comment lines and 33 blank lines
+
+Estimated total reading time of 227 minutes.
+
+
+
+Report for ../tm351/Part 07 Notebooks/07.1 Spreadsheet basics.ipynb:
+
+- total markdown wordcount 4867.0 words across 68 markdown cells
+- total code line count of 82 lines of code across 5 code cells
+  - 65 code lines, 4 comment lines and 12 blank lines
+
+Estimated total reading time of 91 minutes.
+
+
+
+Report for ../tm351/Part 07 Notebooks/07.2 Problems in spreadsheet construction.ipynb:
+
+- total markdown wordcount 2081.0 words across 68 markdown cells
+- total code line count of 4 lines of code across NA code cells
+  - 4 code lines, 0 comment lines and 0 blank lines
+
+Estimated total reading time of 72 minutes.
+
+
+
+Report for ../tm351/Part 07 Notebooks/07.A (Optional) SQLite - A Simple In-Memory and On-Disk SQL database.ipynb:
+
+- total markdown wordcount 1308.0 words across 37 markdown cells
+- total code line count of 93 lines of code across 25 code cells
+  - 49 code lines, 23 comment lines and 21 blank lines
+
+Estimated total reading time of 64 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 08 Notebooks` there are 5 notebooks.
+
+- total markdown wordcount 13159.0 words across 420 markdown cells
+- total code line count of 960 lines of code across 185 code cells
+  - 694 code lines, 65 comment lines and 204 blank lines
+
+Estimated total reading time of 618 minutes.
+
+
+
+Report for ../tm351/Part 08 Notebooks/08.1 Data Definition Language in SQL.ipynb:
+
+- total markdown wordcount 3599.0 words across 89 markdown cells
+- total code line count of 128 lines of code across 26 code cells
+  - 90 code lines, 9 comment lines and 29 blank lines
+
+Estimated total reading time of 120 minutes.
+
+
+
+Report for ../tm351/Part 08 Notebooks/08.2 Data Manipulation Language in SQL.ipynb:
+
+- total markdown wordcount 4008.0 words across 141 markdown cells
+- total code line count of 280 lines of code across 54 code cells
+  - 207 code lines, 14 comment lines and 59 blank lines
+
+Estimated total reading time of 199 minutes.
+
+
+
+Report for ../tm351/Part 08 Notebooks/08.3 Adding column constraints to tables.ipynb:
+
+- total markdown wordcount 5068.0 words across 162 markdown cells
+- total code line count of 342 lines of code across 69 code cells
+  - 235 code lines, 31 comment lines and 77 blank lines
+
+Estimated total reading time of 235 minutes.
+
+
+
+Report for ../tm351/Part 08 Notebooks/reset_databases.ipynb:
+
+- total markdown wordcount 131.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 08 Notebooks/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 45 lines of code across 10 code cells
+  - 31 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 09 Notebooks` there are 5 notebooks.
+
+- total markdown wordcount 10306.0 words across 292 markdown cells
+- total code line count of 714 lines of code across 132 code cells
+  - 516 code lines, 45 comment lines and 153 blank lines
+
+Estimated total reading time of 441 minutes.
+
+
+
+Report for ../tm351/Part 09 Notebooks/09.1 Defining Foreign Keys in SQL.ipynb:
+
+- total markdown wordcount 2799.0 words across 80 markdown cells
+- total code line count of 213 lines of code across 37 code cells
+  - 143 code lines, 18 comment lines and 52 blank lines
+
+Estimated total reading time of 121 minutes.
+
+
+
+Report for ../tm351/Part 09 Notebooks/09.2 Using foreign keys in SQL.ipynb:
+
+- total markdown wordcount 3919.0 words across 98 markdown cells
+- total code line count of 122 lines of code across 27 code cells
+  - 89 code lines, 9 comment lines and 23 blank lines
+
+Estimated total reading time of 133 minutes.
+
+
+
+Report for ../tm351/Part 09 Notebooks/09.3 Working With FOREIGN KEY Constraints.ipynb:
+
+- total markdown wordcount 3104.0 words across 86 markdown cells
+- total code line count of 175 lines of code across 32 code cells
+  - 128 code lines, 7 comment lines and 39 blank lines
+
+Estimated total reading time of 123 minutes.
+
+
+
+Report for ../tm351/Part 09 Notebooks/reset_databases.ipynb:
+
+- total markdown wordcount 131.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 09 Notebooks/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 39 lines of code across 10 code cells
+  - 25 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 10 Notebooks` there are 7 notebooks.
+
+- total markdown wordcount 11794.0 words across 336 markdown cells
+- total code line count of 1016 lines of code across 186 code cells
+  - 753 code lines, 71 comment lines and 194 blank lines
+
+Estimated total reading time of 549 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/10.1 problems with unnormalised data.ipynb:
+
+- total markdown wordcount 2816.0 words across 73 markdown cells
+- total code line count of 80 lines of code across 18 code cells
+  - 55 code lines, 12 comment lines and 13 blank lines
+
+Estimated total reading time of 101 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/10.2 Normalisation - Antique opticals.ipynb:
+
+- total markdown wordcount 4266.0 words across 110 markdown cells
+- total code line count of 267 lines of code across 49 code cells
+  - 201 code lines, 13 comment lines and 53 blank lines
+
+Estimated total reading time of 169 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/10.3 Normalisation - the Hospital scenario.ipynb:
+
+- total markdown wordcount 1039.0 words across 19 markdown cells
+- total code line count of 23 lines of code across 6 code cells
+  - 6 code lines, 14 comment lines and 3 blank lines
+
+Estimated total reading time of 28 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/10.4 Our solution to Normalisation - the Hospital scenario.ipynb:
+
+- total markdown wordcount 1971.0 words across 54 markdown cells
+- total code line count of 229 lines of code across 43 code cells
+  - 182 code lines, 8 comment lines and 39 blank lines
+
+Estimated total reading time of 100 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/10.5 Improvements with normalised data.ipynb:
+
+- total markdown wordcount 1218.0 words across 52 markdown cells
+- total code line count of 213 lines of code across 34 code cells
+  - 153 code lines, 13 comment lines and 47 blank lines
+
+Estimated total reading time of 87 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/reset_databases.ipynb:
+
+- total markdown wordcount 131.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 10 Notebooks/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 39 lines of code across 10 code cells
+  - 25 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 11 Notebooks` there are 11 notebooks.
+
+- total markdown wordcount 18800.0 words across 545 markdown cells
+- total code line count of 2589 lines of code across 431 code cells
+  - 2177 code lines, 131 comment lines and 269 blank lines
+
+Estimated total reading time of 1022 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.0 Setting up the Movie database.ipynb:
+
+- total markdown wordcount 205.0 words across 5 markdown cells
+- total code line count of 1 lines of code across 1 code cells
+  - 0 code lines, 1 comment lines and 0 blank lines
+
+Estimated total reading time of 6 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.1 Movie analysis.ipynb:
+
+- total markdown wordcount 5415.0 words across 142 markdown cells
+- total code line count of 425 lines of code across 79 code cells
+  - 338 code lines, 27 comment lines and 50 blank lines
+
+Estimated total reading time of 238 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.2 subqueries as value and set.ipynb:
+
+- total markdown wordcount 2691.0 words across 70 markdown cells
+- total code line count of 249 lines of code across 37 code cells
+  - 207 code lines, 14 comment lines and 28 blank lines
+
+Estimated total reading time of 115 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.3 Subqueries as tables.ipynb:
+
+- total markdown wordcount 2610.0 words across 65 markdown cells
+- total code line count of 294 lines of code across 31 code cells
+  - 248 code lines, 16 comment lines and 27 blank lines
+
+Estimated total reading time of 104 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.4 Views.ipynb:
+
+- total markdown wordcount 3361.0 words across 102 markdown cells
+- total code line count of 273 lines of code across 46 code cells
+  - 215 code lines, 17 comment lines and 41 blank lines
+
+Estimated total reading time of 153 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.5 Six degrees of Bacon.ipynb:
+
+- total markdown wordcount 1459.0 words across 58 markdown cells
+- total code line count of 377 lines of code across 54 code cells
+  - 309 code lines, 14 comment lines and 54 blank lines
+
+Estimated total reading time of 114 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/11.A SQL Data Investigation Worked Example (optional).ipynb:
+
+- total markdown wordcount 1501.0 words across 28 markdown cells
+- total code line count of 162 lines of code across 26 code cells
+  - 128 code lines, 10 comment lines and 24 blank lines
+
+Estimated total reading time of 60 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/SQL_cheatsheet.ipynb:
+
+- total markdown wordcount 880.0 words across 22 markdown cells
+- total code line count of 46 lines of code across NA code cells
+  - 46 code lines, 0 comment lines and 0 blank lines
+
+Estimated total reading time of 23 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/reset_databases.ipynb:
+
+- total markdown wordcount 131.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 39 lines of code across 10 code cells
+  - 25 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+Report for ../tm351/Part 11 Notebooks/sql_initial_state_movies.ipynb:
+
+- total markdown wordcount 194.0 words across 25 markdown cells
+- total code line count of 558 lines of code across 121 code cells
+  - 530 code lines, 21 comment lines and 6 blank lines
+
+Estimated total reading time of 145 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 12 Notebooks` there are 4 notebooks.
+
+- total markdown wordcount 6821.0 words across 264 markdown cells
+- total code line count of 985 lines of code across 198 code cells
+  - 836 code lines, 54 comment lines and 90 blank lines
+
+Estimated total reading time of 472 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/12.1 Concurrent Transactions.ipynb:
+
+- total markdown wordcount 3308.0 words across 107 markdown cells
+- total code line count of 334 lines of code across 58 code cells
+  - 283 code lines, 19 comment lines and 24 blank lines
+
+Estimated total reading time of 173 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/12.2 Transaction anomalies.ipynb:
+
+- total markdown wordcount 3029.0 words across 129 markdown cells
+- total code line count of 447 lines of code across 104 code cells
+  - 397 code lines, 24 comment lines and 27 blank lines
+
+Estimated total reading time of 235 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/reset_databases.ipynb:
+
+- total markdown wordcount 131.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 39 lines of code across 10 code cells
+  - 25 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 12 Notebooks/optional_part_12` there are 5 notebooks.
+
+- total markdown wordcount 2092.0 words across 93 markdown cells
+- total code line count of 418 lines of code across 59 code cells
+  - 289 code lines, 51 comment lines and 82 blank lines
+
+Estimated total reading time of 157 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/optional_part_12/12.3 Optional- Concurrent Transactions and Multiple Threads.ipynb:
+
+- total markdown wordcount 373.0 words across 2 markdown cells
+- total code line count of 0 lines of code across NA code cells
+  - 0 code lines, 0 comment lines and 0 blank lines
+
+Estimated total reading time of 5 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/optional_part_12/12.3a Gibson.ipynb:
+
+- total markdown wordcount 566.0 words across 32 markdown cells
+- total code line count of 101 lines of code across 11 code cells
+  - 64 code lines, 19 comment lines and 19 blank lines
+
+Estimated total reading time of 44 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/optional_part_12/12.3b Paxton.ipynb:
+
+- total markdown wordcount 665.0 words across 31 markdown cells
+- total code line count of 113 lines of code across 12 code cells
+  - 69 code lines, 21 comment lines and 24 blank lines
+
+Estimated total reading time of 44 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/optional_part_12/reset_databases.ipynb:
+
+- total markdown wordcount 135.0 words across 11 markdown cells
+- total code line count of 165 lines of code across 26 code cells
+  - 131 code lines, 5 comment lines and 29 blank lines
+
+Estimated total reading time of 37 minutes.
+
+
+
+Report for ../tm351/Part 12 Notebooks/optional_part_12/sql_init.ipynb:
+
+- total markdown wordcount 353.0 words across 17 markdown cells
+- total code line count of 39 lines of code across 10 code cells
+  - 25 code lines, 6 comment lines and 10 blank lines
+
+Estimated total reading time of 27 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 14 Notebooks` there are 7 notebooks.
+
+- total markdown wordcount 16665.0 words across 463 markdown cells
+- total code line count of 993 lines of code across 277 code cells
+  - 814 code lines, 95 comment lines and 84 blank lines
+
+Estimated total reading time of 767 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.1 Basic CRUD.ipynb:
+
+- total markdown wordcount 4055.0 words across 107 markdown cells
+- total code line count of 130 lines of code across 56 code cells
+  - 115 code lines, 10 comment lines and 6 blank lines
+
+Estimated total reading time of 170 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.2 Working With Embedded Documents.ipynb:
+
+- total markdown wordcount 1157.0 words across 37 markdown cells
+- total code line count of 53 lines of code across 20 code cells
+  - 46 code lines, 3 comment lines and 5 blank lines
+
+Estimated total reading time of 57 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.3 Importing Data into MongoDB.ipynb:
+
+- total markdown wordcount 1972.0 words across 61 markdown cells
+- total code line count of 222 lines of code across 40 code cells
+  - 193 code lines, 8 comment lines and 18 blank lines
+
+Estimated total reading time of 104 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.4 Introduction to the accidents database.ipynb:
+
+- total markdown wordcount 2513.0 words across 55 markdown cells
+- total code line count of 119 lines of code across 35 code cells
+  - 105 code lines, 6 comment lines and 7 blank lines
+
+Estimated total reading time of 95 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.5 Investigating the accident data.ipynb:
+
+- total markdown wordcount 2125.0 words across 62 markdown cells
+- total code line count of 105 lines of code across 37 code cells
+  - 79 code lines, 19 comment lines and 7 blank lines
+
+Estimated total reading time of 101 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.A Optional- Using statistical tests - correlation.ipynb:
+
+- total markdown wordcount 3232.0 words across 78 markdown cells
+- total code line count of 176 lines of code across 46 code cells
+  - 142 code lines, 19 comment lines and 16 blank lines
+
+Estimated total reading time of 133 minutes.
+
+
+
+Report for ../tm351/Part 14 Notebooks/14.B Optional- Using statistical tests - regression.ipynb:
+
+- total markdown wordcount 1611.0 words across 63 markdown cells
+- total code line count of 188 lines of code across 43 code cells
+  - 134 code lines, 30 comment lines and 25 blank lines
+
+Estimated total reading time of 107 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 15 Notebooks` there are 6 notebooks.
+
+- total markdown wordcount 13130.0 words across 351 markdown cells
+- total code line count of 1512 lines of code across 225 code cells
+  - 1161 code lines, 137 comment lines and 212 blank lines
+
+Estimated total reading time of 597 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.1 Mapping accidents.ipynb:
+
+- total markdown wordcount 2511.0 words across 68 markdown cells
+- total code line count of 337 lines of code across 45 code cells
+  - 242 code lines, 32 comment lines and 62 blank lines
+
+Estimated total reading time of 117 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.2 Searching within a geographical area.ipynb:
+
+- total markdown wordcount 1739.0 words across 52 markdown cells
+- total code line count of 184 lines of code across 28 code cells
+  - 128 code lines, 20 comment lines and 35 blank lines
+
+Estimated total reading time of 82 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.3 Introducing aggregation pipelines.ipynb:
+
+- total markdown wordcount 2237.0 words across 50 markdown cells
+- total code line count of 240 lines of code across 34 code cells
+  - 212 code lines, 20 comment lines and 11 blank lines
+
+Estimated total reading time of 89 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.4 Grouping and summarising operations in aggregation pipelines.ipynb:
+
+- total markdown wordcount 3224.0 words across 95 markdown cells
+- total code line count of 446 lines of code across 63 code cells
+  - 348 code lines, 40 comment lines and 59 blank lines
+
+Estimated total reading time of 163 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.5 Introducing the Roads collection.ipynb:
+
+- total markdown wordcount 2184.0 words across 51 markdown cells
+- total code line count of 118 lines of code across 31 code cells
+  - 96 code lines, 7 comment lines and 14 blank lines
+
+Estimated total reading time of 85 minutes.
+
+
+
+Report for ../tm351/Part 15 Notebooks/15.6 Working with roads location data.ipynb:
+
+- total markdown wordcount 1235.0 words across 35 markdown cells
+- total code line count of 187 lines of code across 24 code cells
+  - 135 code lines, 18 comment lines and 31 blank lines
+
+Estimated total reading time of 61 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 16 Notebooks` there are 2 notebooks.
+
+- total markdown wordcount 3875.0 words across 94 markdown cells
+- total code line count of 408 lines of code across 64 code cells
+  - 349 code lines, 31 comment lines and 22 blank lines
+
+Estimated total reading time of 173 minutes.
+
+
+
+Report for ../tm351/Part 16 Notebooks/16.1 Accidents over time.ipynb:
+
+- total markdown wordcount 1025.0 words across 31 markdown cells
+- total code line count of 50 lines of code across 17 code cells
+  - 42 code lines, 4 comment lines and 5 blank lines
+
+Estimated total reading time of 49 minutes.
+
+
+
+Report for ../tm351/Part 16 Notebooks/16.2 Python map-reduce.ipynb:
+
+- total markdown wordcount 2850.0 words across 63 markdown cells
+- total code line count of 358 lines of code across 47 code cells
+  - 307 code lines, 27 comment lines and 17 blank lines
+
+Estimated total reading time of 124 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 20 Notebooks` there are 2 notebooks.
+
+- total markdown wordcount 2363.0 words across 65 markdown cells
+- total code line count of 205 lines of code across 28 code cells
+  - 133 code lines, 24 comment lines and 34 blank lines
+
+Estimated total reading time of 94 minutes.
+
+
+
+Report for ../tm351/Part 20 Notebooks/20.1 The k-nearest neighbours classifier.ipynb:
+
+- total markdown wordcount 1337.0 words across 39 markdown cells
+- total code line count of 103 lines of code across 19 code cells
+  - 84 code lines, 7 comment lines and 14 blank lines
+
+Estimated total reading time of 58 minutes.
+
+
+
+Report for ../tm351/Part 20 Notebooks/20.2 The leave-one-out algorithm.ipynb:
+
+- total markdown wordcount 1026.0 words across 26 markdown cells
+- total code line count of 102 lines of code across 9 code cells
+  - 49 code lines, 17 comment lines and 20 blank lines
+
+Estimated total reading time of 36 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 21 Notebooks` there are 3 notebooks.
+
+- total markdown wordcount 2485.0 words across 71 markdown cells
+- total code line count of 370 lines of code across 53 code cells
+  - 268 code lines, 43 comment lines and 61 blank lines
+
+Estimated total reading time of 125 minutes.
+
+
+
+Report for ../tm351/Part 21 Notebooks/21.1 The k-means algorithm.ipynb:
+
+- total markdown wordcount 722.0 words across 22 markdown cells
+- total code line count of 80 lines of code across 17 code cells
+  - 55 code lines, 12 comment lines and 13 blank lines
+
+Estimated total reading time of 39 minutes.
+
+
+
+Report for ../tm351/Part 21 Notebooks/21.2 k-means clustering - choosing initial values.ipynb:
+
+- total markdown wordcount 579.0 words across 15 markdown cells
+- total code line count of 135 lines of code across 12 code cells
+  - 96 code lines, 12 comment lines and 27 blank lines
+
+Estimated total reading time of 28 minutes.
+
+
+
+Report for ../tm351/Part 21 Notebooks/21.3 Visualising clusters with silhouette coefficients.ipynb:
+
+- total markdown wordcount 1184.0 words across 34 markdown cells
+- total code line count of 155 lines of code across 24 code cells
+  - 117 code lines, 19 comment lines and 21 blank lines
+
+Estimated total reading time of 58 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 22 Notebooks` there are 4 notebooks.
+
+- total markdown wordcount 5500.0 words across 174 markdown cells
+- total code line count of 590 lines of code across 100 code cells
+  - 429 code lines, 58 comment lines and 97 blank lines
+
+Estimated total reading time of 279 minutes.
+
+
+
+Report for ../tm351/Part 22 Notebooks/22.1 Case study preliminaries - the vector space model.ipynb:
+
+- total markdown wordcount 1620.0 words across 50 markdown cells
+- total code line count of 79 lines of code across 27 code cells
+  - 58 code lines, 8 comment lines and 7 blank lines
+
+Estimated total reading time of 79 minutes.
+
+
+
+Report for ../tm351/Part 22 Notebooks/22.2 Preliminaries - building the classifier.ipynb:
+
+- total markdown wordcount 1246.0 words across 37 markdown cells
+- total code line count of 74 lines of code across 18 code cells
+  - 57 code lines, 4 comment lines and 8 blank lines
+
+Estimated total reading time of 56 minutes.
+
+
+
+Report for ../tm351/Part 22 Notebooks/22.3 Applying the classifier to a real dataset.ipynb:
+
+- total markdown wordcount 1747.0 words across 49 markdown cells
+- total code line count of 235 lines of code across 29 code cells
+  - 168 code lines, 24 comment lines and 45 blank lines
+
+Estimated total reading time of 80 minutes.
+
+
+
+Report for ../tm351/Part 22 Notebooks/22.4 Term frequency and inverse document frequency.ipynb:
+
+- total markdown wordcount 887.0 words across 38 markdown cells
+- total code line count of 202 lines of code across 26 code cells
+  - 146 code lines, 22 comment lines and 37 blank lines
+
+Estimated total reading time of 64 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 23 Notebooks` there are 5 notebooks.
+
+- total markdown wordcount 2657.0 words across 86 markdown cells
+- total code line count of 211 lines of code across 34 code cells
+  - 159 code lines, 26 comment lines and 28 blank lines
+
+Estimated total reading time of 124 minutes.
+
+
+
+Report for ../tm351/Part 23 Notebooks/23.1  SQL injection hacks.ipynb:
+
+- total markdown wordcount 2182.0 words across 56 markdown cells
+- total code line count of 40 lines of code across 9 code cells
+  - 27 code lines, 11 comment lines and 2 blank lines
+
+Estimated total reading time of 69 minutes.
+
+
+
+Report for ../tm351/Part 23 Notebooks/form_server.ipynb:
+
+- total markdown wordcount 105.0 words across 8 markdown cells
+- total code line count of 29 lines of code across 6 code cells
+  - 19 code lines, 4 comment lines and 6 blank lines
+
+Estimated total reading time of 14 minutes.
+
+
+
+Report for ../tm351/Part 23 Notebooks/form_server_safe.ipynb:
+
+- total markdown wordcount 125.0 words across 8 markdown cells
+- total code line count of 30 lines of code across 6 code cells
+  - 20 code lines, 4 comment lines and 6 blank lines
+
+Estimated total reading time of 14 minutes.
+
+
+
+Report for ../tm351/Part 23 Notebooks/part_23_authentication_notebook.ipynb:
+
+- total markdown wordcount 132.0 words across 7 markdown cells
+- total code line count of 12 lines of code across 4 code cells
+  - 8 code lines, 3 comment lines and 3 blank lines
+
+Estimated total reading time of 11 minutes.
+
+
+
+Report for ../tm351/Part 23 Notebooks/reset_form_server.ipynb:
+
+- total markdown wordcount 113.0 words across 7 markdown cells
+- total code line count of 100 lines of code across 9 code cells
+  - 85 code lines, 4 comment lines and 11 blank lines
+
+Estimated total reading time of 16 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 25 Notebooks` there are 11 notebooks.
+
+- total markdown wordcount 8888.0 words across 175 markdown cells
+- total code line count of 1286 lines of code across 104 code cells
+  - 854 code lines, 225 comment lines and 205 blank lines
+
+Estimated total reading time of 318 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.1 Exploring the RDFLib package.ipynb:
+
+- total markdown wordcount 2443.0 words across 42 markdown cells
+- total code line count of 153 lines of code across 20 code cells
+  - 86 code lines, 36 comment lines and 30 blank lines
+
+Estimated total reading time of 76 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.2 Querying using SPARQL.ipynb:
+
+- total markdown wordcount 2764.0 words across 71 markdown cells
+- total code line count of 402 lines of code across 34 code cells
+  - 256 code lines, 90 comment lines and 54 blank lines
+
+Estimated total reading time of 117 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.3 Endpoints - accessing real data.ipynb:
+
+- total markdown wordcount 1143.0 words across 12 markdown cells
+- total code line count of 77 lines of code across 1 code cells
+  - 39 code lines, 18 comment lines and 20 blank lines
+
+Estimated total reading time of 20 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.DBP Endpoint - DBPedia.ipynb:
+
+- total markdown wordcount 507.0 words across 8 markdown cells
+- total code line count of 87 lines of code across 7 code cells
+  - 52 code lines, 19 comment lines and 17 blank lines
+
+Estimated total reading time of 16 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.EAB Endpoint - Environment Agency Bathing Water.ipynb:
+
+- total markdown wordcount 214.0 words across 4 markdown cells
+- total code line count of 57 lines of code across 6 code cells
+  - 41 code lines, 11 comment lines and 5 blank lines
+
+Estimated total reading time of 11 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.LOD Endpoint - Linked Open Data Cloud.ipynb:
+
+- total markdown wordcount 39.0 words across 3 markdown cells
+- total code line count of 45 lines of code across 4 code cells
+  - 34 code lines, 3 comment lines and 8 blank lines
+
+Estimated total reading time of 7 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.LRG Endpoint - UK Land Registry.ipynb:
+
+- total markdown wordcount 598.0 words across 6 markdown cells
+- total code line count of 68 lines of code across 3 code cells
+  - 53 code lines, 2 comment lines and 13 blank lines
+
+Estimated total reading time of 12 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.ODC Endpoint - DCLG Open Data Communities.ipynb:
+
+- total markdown wordcount 334.0 words across 4 markdown cells
+- total code line count of 45 lines of code across 2 code cells
+  - 32 code lines, 4 comment lines and 9 blank lines
+
+Estimated total reading time of 7 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.ONS Endpoint - ONS Geography Linked Data .ipynb:
+
+- total markdown wordcount 145.0 words across 5 markdown cells
+- total code line count of 79 lines of code across 6 code cells
+  - 52 code lines, 15 comment lines and 12 blank lines
+
+Estimated total reading time of 11 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.UKP Endpoint - UK Parliament.ipynb:
+
+- total markdown wordcount 254.0 words across 9 markdown cells
+- total code line count of 149 lines of code across 9 code cells
+  - 118 code lines, 12 comment lines and 19 blank lines
+
+Estimated total reading time of 18 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/25.A.WKD Endpoint - Wikidata.ipynb:
+
+- total markdown wordcount 447.0 words across 11 markdown cells
+- total code line count of 124 lines of code across 12 code cells
+  - 91 code lines, 15 comment lines and 18 blank lines
+
+Estimated total reading time of 23 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 25 Notebooks/data` there are 2 notebooks.
+
+- total markdown wordcount 147.0 words across 4 markdown cells
+- total code line count of 53 lines of code across 3 code cells
+  - 45 code lines, 0 comment lines and 8 blank lines
+
+Estimated total reading time of 7 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/data/25.D.OS Deprecated Endpoint - Ordnance Survey.ipynb:
+
+- total markdown wordcount 80.0 words across 2 markdown cells
+- total code line count of 27 lines of code across 2 code cells
+  - 23 code lines, 0 comment lines and 4 blank lines
+
+Estimated total reading time of 4 minutes.
+
+
+
+Report for ../tm351/Part 25 Notebooks/data/25.D.OSU Deprecated Endpoint - Ordnance Survey.ipynb:
+
+- total markdown wordcount 67.0 words across 2 markdown cells
+- total code line count of 26 lines of code across 1 code cells
+  - 22 code lines, 0 comment lines and 4 blank lines
+
+Estimated total reading time of 3 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/Part 26 Notebooks` there are 3 notebooks.
+
+- total markdown wordcount 4124.0 words across 115 markdown cells
+- total code line count of 813 lines of code across 50 code cells
+  - 531 code lines, 110 comment lines and 173 blank lines
+
+Estimated total reading time of 179 minutes.
+
+
+
+Report for ../tm351/Part 26 Notebooks/26.1 Using multiple endpoints.ipynb:
+
+- total markdown wordcount 995.0 words across 32 markdown cells
+- total code line count of 200 lines of code across 7 code cells
+  - 135 code lines, 16 comment lines and 49 blank lines
+
+Estimated total reading time of 42 minutes.
+
+
+
+Report for ../tm351/Part 26 Notebooks/26.2 The SPARQL CONSTRUCT query and inferencing.ipynb:
+
+- total markdown wordcount 1616.0 words across 31 markdown cells
+- total code line count of 293 lines of code across 14 code cells
+  - 168 code lines, 56 comment lines and 67 blank lines
+
+Estimated total reading time of 52 minutes.
+
+
+
+Report for ../tm351/Part 26 Notebooks/26.3 Visualisation.ipynb:
+
+- total markdown wordcount 1513.0 words across 52 markdown cells
+- total code line count of 320 lines of code across 29 code cells
+  - 228 code lines, 38 comment lines and 57 blank lines
+
+Estimated total reading time of 85 minutes.
+
+
+
+
+
+---------
+
+
+
+
+In directory `../tm351/content` there are 1 notebooks.
+
+- total markdown wordcount 358.0 words across 18 markdown cells
+- total code line count of 96 lines of code across 33 code cells
+  - 55 code lines, 32 comment lines and 9 blank lines
+
+Estimated total reading time of 52 minutes.
+
+
+
+Report for ../tm351/content/TM351 VM Installation Test.ipynb:
+
+- total markdown wordcount 358.0 words across 18 markdown cells
+- total code line count of 96 lines of code across 33 code cells
+  - 55 code lines, 32 comment lines and 9 blank lines
+
+Estimated total reading time of 52 minutes.
+
+
